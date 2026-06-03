@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "tournament": "2026 FIFA World Cup",
+    "hosts": ["USA", "Canada", "Mexico"],
+    "draw_date": "2025-12-05",
+    "verified": true,
+    "source_note": "Verified against the authoritative 2026 FIFA World Cup draw (Wikipedia 'final draw' page, fetched 2026-06-02). Group lineups confirmed. Slot ordering within each group is set to Pot 1 → Pot 4 as a convention; the actual FIFA per-group slot numbering (which determines which team is the home-team for the matchday-1 opener, etc.) may differ — verify against the official FIFA fixture list before publishing if matchday pairings matter."
+  },
+  "groups": {
+    "A": [
+      {"slot": 1, "name": "Mexico",                "fifa_code": "MEX", "pot": 1, "confederation": "CONCACAF"},
+      {"slot": 2, "name": "South Korea",           "fifa_code": "KOR", "pot": 2, "confederation": "AFC"},
+      {"slot": 3, "name": "South Africa",          "fifa_code": "RSA", "pot": 3, "confederation": "CAF"},
+      {"slot": 4, "name": "Czech Republic",        "fifa_code": "CZE", "pot": 4, "confederation": "UEFA"}
+    ],
+    "B": [
+      {"slot": 1, "name": "Canada",                "fifa_code": "CAN", "pot": 1, "confederation": "CONCACAF"},
+      {"slot": 2, "name": "Switzerland",           "fifa_code": "SUI", "pot": 2, "confederation": "UEFA"},
+      {"slot": 3, "name": "Qatar",                 "fifa_code": "QAT", "pot": 3, "confederation": "AFC"},
+      {"slot": 4, "name": "Bosnia and Herzegovina","fifa_code": "BIH", "pot": 4, "confederation": "UEFA"}
+    ],
+    "C": [
+      {"slot": 1, "name": "Brazil",                "fifa_code": "BRA", "pot": 1, "confederation": "CONMEBOL"},
+      {"slot": 2, "name": "Morocco",               "fifa_code": "MAR", "pot": 2, "confederation": "CAF"},
+      {"slot": 3, "name": "Scotland",              "fifa_code": "SCO", "pot": 3, "confederation": "UEFA"},
+      {"slot": 4, "name": "Haiti",                 "fifa_code": "HAI", "pot": 4, "confederation": "CONCACAF"}
+    ],
+    "D": [
+      {"slot": 1, "name": "USA",                   "fifa_code": "USA", "pot": 1, "confederation": "CONCACAF"},
+      {"slot": 2, "name": "Australia",             "fifa_code": "AUS", "pot": 2, "confederation": "AFC"},
+      {"slot": 3, "name": "Paraguay",              "fifa_code": "PAR", "pot": 3, "confederation": "CONMEBOL"},
+      {"slot": 4, "name": "Turkey",                "fifa_code": "TUR", "pot": 4, "confederation": "UEFA"}
+    ],
+    "E": [
+      {"slot": 1, "name": "Germany",               "fifa_code": "GER", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Ecuador",               "fifa_code": "ECU", "pot": 2, "confederation": "CONMEBOL"},
+      {"slot": 3, "name": "Ivory Coast",           "fifa_code": "CIV", "pot": 3, "confederation": "CAF"},
+      {"slot": 4, "name": "Curacao",               "fifa_code": "CUW", "pot": 4, "confederation": "CONCACAF"}
+    ],
+    "F": [
+      {"slot": 1, "name": "Netherlands",           "fifa_code": "NED", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Japan",                 "fifa_code": "JPN", "pot": 2, "confederation": "AFC"},
+      {"slot": 3, "name": "Tunisia",               "fifa_code": "TUN", "pot": 3, "confederation": "CAF"},
+      {"slot": 4, "name": "Sweden",                "fifa_code": "SWE", "pot": 4, "confederation": "UEFA"}
+    ],
+    "G": [
+      {"slot": 1, "name": "Belgium",               "fifa_code": "BEL", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Iran",                  "fifa_code": "IRN", "pot": 2, "confederation": "AFC"},
+      {"slot": 3, "name": "Egypt",                 "fifa_code": "EGY", "pot": 3, "confederation": "CAF"},
+      {"slot": 4, "name": "New Zealand",           "fifa_code": "NZL", "pot": 4, "confederation": "OFC"}
+    ],
+    "H": [
+      {"slot": 1, "name": "Spain",                 "fifa_code": "ESP", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Uruguay",               "fifa_code": "URU", "pot": 2, "confederation": "CONMEBOL"},
+      {"slot": 3, "name": "Saudi Arabia",          "fifa_code": "KSA", "pot": 3, "confederation": "AFC"},
+      {"slot": 4, "name": "Cape Verde",            "fifa_code": "CPV", "pot": 4, "confederation": "CAF"}
+    ],
+    "I": [
+      {"slot": 1, "name": "France",                "fifa_code": "FRA", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Senegal",               "fifa_code": "SEN", "pot": 2, "confederation": "CAF"},
+      {"slot": 3, "name": "Norway",                "fifa_code": "NOR", "pot": 3, "confederation": "UEFA"},
+      {"slot": 4, "name": "Iraq",                  "fifa_code": "IRQ", "pot": 4, "confederation": "AFC"}
+    ],
+    "J": [
+      {"slot": 1, "name": "Argentina",             "fifa_code": "ARG", "pot": 1, "confederation": "CONMEBOL"},
+      {"slot": 2, "name": "Austria",               "fifa_code": "AUT", "pot": 2, "confederation": "UEFA"},
+      {"slot": 3, "name": "Algeria",               "fifa_code": "ALG", "pot": 3, "confederation": "CAF"},
+      {"slot": 4, "name": "Jordan",                "fifa_code": "JOR", "pot": 4, "confederation": "AFC"}
+    ],
+    "K": [
+      {"slot": 1, "name": "Portugal",              "fifa_code": "POR", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Colombia",              "fifa_code": "COL", "pot": 2, "confederation": "CONMEBOL"},
+      {"slot": 3, "name": "Uzbekistan",            "fifa_code": "UZB", "pot": 3, "confederation": "AFC"},
+      {"slot": 4, "name": "DR Congo",              "fifa_code": "COD", "pot": 4, "confederation": "CAF"}
+    ],
+    "L": [
+      {"slot": 1, "name": "England",               "fifa_code": "ENG", "pot": 1, "confederation": "UEFA"},
+      {"slot": 2, "name": "Croatia",               "fifa_code": "CRO", "pot": 2, "confederation": "UEFA"},
+      {"slot": 3, "name": "Panama",                "fifa_code": "PAN", "pot": 3, "confederation": "CONCACAF"},
+      {"slot": 4, "name": "Ghana",                 "fifa_code": "GHA", "pot": 4, "confederation": "CAF"}
+    ]
+  }
+}

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 World Cup Survivor — Kalshi Odds</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .header {
+    max-width: 1600px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .header .meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .header .meta span { margin-right: 1.5rem; }
+
+  /* ── Info section ────────────────────────────────────── */
+  .info-section {
+    max-width: 1600px;
+    margin: 0 auto 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .info-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .info-toggle:hover { color: var(--accent); }
+  .info-toggle .chevron { font-size: 0.65rem; transition: transform 0.2s; }
+  .info-toggle.open .chevron { transform: rotate(90deg); }
+
+  .info-body {
+    display: none;
+    padding: 0 1rem 1rem;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .info-body.open { display: block; }
+
+  .info-body h3 {
+    color: var(--text);
+    font-size: 0.85rem;
+    margin: 1rem 0 0.4rem;
+  }
+  .info-body h3:first-child { margin-top: 0; }
+  .info-body ul { margin-left: 1.2rem; margin-bottom: 0.5rem; }
+  .info-body li { margin-bottom: 0.25rem; }
+  .info-body strong { color: var(--text); }
+  .info-body code {
+    background: var(--bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.78rem;
+  }
+  .info-body a { color: var(--accent); text-decoration: none; }
+  .info-body a:hover { text-decoration: underline; }
+
+  /* ── Filter bar ──────────────────────────────────────── */
+  .filters {
+    max-width: 1600px;
+    margin: 0 auto 1rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .filters select, .filters input {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .filters input[type="text"] { width: 160px; }
+
+  /* ── Table ───────────────────────────────────────────── */
+  .table-wrap {
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  thead { position: sticky; top: 0; z-index: 2; }
+
+  th {
+    background: var(--surface);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    text-align: left;
+  }
+
+  th:hover { color: var(--accent); }
+  th .sort-arrow { margin-left: 0.3rem; font-size: 0.6rem; opacity: 0.4; }
+  th.sorted .sort-arrow { opacity: 1; }
+
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: rgba(88, 166, 255, 0.05); }
+  tr.eliminated td { opacity: 0.35; text-decoration: line-through; }
+
+  .col-code { text-align: center; width: 3.5rem; font-weight: 600; }
+  .col-group { text-align: center; width: 3rem; }
+  .col-pot { text-align: center; width: 3rem; }
+
+  .prob-cell {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    min-width: 4.5rem;
+    cursor: default;
+  }
+
+  .md-cell .md-opp {
+    display: block;
+    font-size: 0.65rem;
+    opacity: 0.75;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .col-best { font-weight: 600; color: var(--accent); }
+  .col-best.best-risky {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .prob-cell a {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .prob-cell a:hover { text-decoration: underline; }
+
+  /* ── Group color chips (A–L) ─────────────────────────── */
+  .group-chip {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  /* Cycle colors for 12 groups */
+  .group-A { background: #1f3d5c; color: #58a6ff; }
+  .group-B { background: #3b2a1a; color: #f0883e; }
+  .group-C { background: #1a3a2a; color: #3fb950; }
+  .group-D { background: #3a1f3a; color: #d2a8ff; }
+  .group-E { background: #2a1f3a; color: #a371f7; }
+  .group-F { background: #3a3a1f; color: #e3b341; }
+  .group-G { background: #1f3a3a; color: #56d4dd; }
+  .group-H { background: #3a1f2a; color: #ff7b72; }
+  .group-I { background: #2a3a1f; color: #7ee787; }
+  .group-J { background: #1f2a3a; color: #79c0ff; }
+  .group-K { background: #3a2a1f; color: #ffa657; }
+  .group-L { background: #2a1f1f; color: #ff9492; }
+
+  .conf-chip {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Info icon ───────────────────────────────────────── */
+  .info-tip { display: inline-block; margin-left: 0.3rem; cursor: help; }
+  .info-tip .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--text-muted);
+    font-size: 0.55rem;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    vertical-align: middle;
+  }
+  .info-tip:hover .info-icon { border-color: var(--accent); color: var(--accent); }
+
+  #floating-tooltip {
+    display: none;
+    position: fixed;
+    background: #2d333b;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.5;
+    white-space: normal;
+    max-width: 280px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  /* ── No-data state ───────────────────────────────────── */
+  .no-data {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+  }
+  .no-data h2 { margin-bottom: 0.5rem; }
+
+  /* ── CSV export ───────────────────────────────────────── */
+  .csv-btn {
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .csv-btn:hover { background: var(--border); border-color: var(--accent); }
+
+  @media (max-width: 768px) {
+    body { padding: 0.5rem; }
+    .header h1 { font-size: 1.2rem; }
+    table { font-size: 0.75rem; }
+    td, th { padding: 0.35rem 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚽ 2026 World Cup Survivor — Kalshi Odds</h1>
+  <div class="meta">
+    <span>Last updated: {{ updated_at }}</span>
+    <span>{{ nation_count }} nations</span>
+    <span>Current round: <strong>{{ current_round }}</strong></span>
+    <span>Source: <a href="https://kalshi.com/category/sports/soccer" style="color:var(--accent)" target="_blank" rel="noopener">Kalshi Soccer Markets</a></span>
+  </div>
+</div>
+
+<!-- ── Info ──────────────────────────────────────────────────────── -->
+<div class="info-section">
+  <div class="info-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+    <span class="chevron">&#9654;</span> How World Cup Survivor Pools Work &amp; How to Read This Table
+  </div>
+  <div class="info-body">
+    <h3>Format</h3>
+    <ul>
+      <li><strong>48 nations in 12 groups of 4</strong> (new expanded format). Each team plays 3 group matches.</li>
+      <li><strong>Top 2 from each group + 8 best 3rd-place finishers</strong> advance to the Round of 32, then knockout to the Final.</li>
+      <li>Group matches can end in a <strong>draw</strong> — only outright wins help your survivor pick.</li>
+    </ul>
+
+    <h3>How Survivor Pools Work (World Cup variant)</h3>
+    <ul>
+      <li><strong>Group stage</strong> — pick one nation per matchday whose game you think they'll win outright. A draw is treated as a loss for survivor purposes.</li>
+      <li><strong>Knockout</strong> — pick one nation per round who you think will win their game (after 90/120 mins or penalties).</li>
+      <li><strong>Each nation may only be used once</strong> over the entire tournament. Save your top seeds for the rounds where you actually need them.</li>
+    </ul>
+
+    <h3>Data Sources</h3>
+    <ul>
+      <li><strong>Kalshi per-game markets</strong> — for each group match, Kalshi lists separate "Team A wins" / "Team B wins" / "Draw" contracts. The MD1/MD2/MD3 columns show the last-traded YES price on the team-wins contract.</li>
+      <li><strong>Kalshi advancement futures</strong> — "Will Brazil reach the Quarterfinals?", etc. The Make R16, Make QF, Make SF, Make Final columns are the implied cumulative advancement probability for that round.</li>
+      <li><strong>Champion futures</strong> — Kalshi's "winner of the 2026 World Cup" event.</li>
+    </ul>
+
+    <h3>How the Numbers Are Calculated</h3>
+    <ul>
+      <li><strong>Cumulative probabilities</strong> (the KO round columns) come straight from advancement futures.</li>
+      <li><strong>Conditional (game-win) probabilities</strong> are derived by dividing consecutive rounds:
+        <code>P(win R16 game) = P(reach QF) / P(reach R16)</code>.</li>
+      <li><strong>Group-stage probabilities</strong> are per-game team-win prices (the MD1/MD2/MD3 columns); they are <em>not</em> cumulative because every team plays all 3 matchdays regardless of earlier results.</li>
+      <li><strong>Best Pick</strong> = the latest round where this team's per-game win probability is ≥ 65%. (Lower threshold than basketball because draws compress per-game soccer win rates.)</li>
+    </ul>
+
+    <h3>Strategy Tips</h3>
+    <ul>
+      <li>Group-stage win rates are <em>lower</em> than basketball — a top seed against a Pot 4 opponent might only price at 65–75% because of the draw possibility.</li>
+      <li>Don't waste a Pot 1 nation on MD1 if their MD3 opponent is much weaker — check all three matchdays in the row.</li>
+      <li>R32 and R16 are the "easy" knockout rounds for top seeds. QF onwards is where favourites get squeezed.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── Filter bar ────────────────────────────────────────────────── -->
+<div class="filters">
+  <button class="csv-btn" onclick="exportCsv()" title="Export visible table to CSV">⬇ Export CSV</button>
+
+  <label for="filter-group">Group:</label>
+  <select id="filter-group" onchange="applyFilters()">
+    <option value="">All</option>
+    {% for g in groups %}
+    <option value="{{ g }}">{{ g }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="filter-pot">Pot:</label>
+  <select id="filter-pot" onchange="applyFilters()">
+    <option value="">All</option>
+    <option value="1">Pot 1</option>
+    <option value="2">Pot 2</option>
+    <option value="3">Pot 3</option>
+    <option value="4">Pot 4</option>
+  </select>
+
+  <label for="filter-conf">Confed:</label>
+  <select id="filter-conf" onchange="applyFilters()">
+    <option value="">All</option>
+    {% for c in confederations %}
+    <option value="{{ c }}">{{ c }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="filter-search">Search:</label>
+  <input type="text" id="filter-search" placeholder="Nation or code…" oninput="applyFilters()">
+
+  <label>
+    <input type="checkbox" id="filter-eliminated" onchange="applyFilters()">
+    Show eliminated
+  </label>
+</div>
+
+{% if rows %}
+<div class="table-wrap">
+  <table id="odds-table">
+    <thead>
+      <tr>
+        <th data-col="nation" onclick="sortTable('nation')">Nation <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="code" class="col-code" onclick="sortTable('code')">Code <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="group" class="col-group" onclick="sortTable('group')">Group <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="pot" class="col-pot" onclick="sortTable('pot')">Pot <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="confederation" onclick="sortTable('confederation')">Confed <span class="sort-arrow">&#9650;</span></th>
+
+        {% for md in visible_md %}
+        <th data-col="{{ md }}" onclick="sortTable('{{ md }}')">
+          {{ round_labels[md] }}
+          <span class="info-tip" data-tip="Kalshi per-game market price: probability this nation wins their {{ md }} group match outright (a draw counts as a loss for survivor).">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        {% endfor %}
+
+        {% for rnd in visible_ko %}
+        <th data-col="{{ rnd }}" onclick="sortTable('{{ rnd }}')">
+          {{ round_labels[rnd] }}
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        {% endfor %}
+
+        <th data-col="champ" onclick="sortTable('champ')">
+          Win Cup
+          <span class="info-tip" data-tip="Implied probability this nation wins the entire World Cup, from Kalshi's tournament-winner futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+
+        <th data-col="best" onclick="sortTable('best')">
+          Best Pick
+          <span class="info-tip" data-tip="The latest round where this nation has ≥65% per-game win probability — i.e. the most strategic round to spend this nation in your survivor pool. Bold blue = safe (≥65%). Italic gray = no safe round; shows the best available.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr class="{% if row.eliminated %}eliminated{% endif %}"
+          data-nation="{{ row.nation }}"
+          data-code="{{ row.fifa_code }}"
+          data-group="{{ row.group }}"
+          data-pot="{{ row.pot }}"
+          data-conf="{{ row.confederation }}"
+          data-eliminated="{{ row.eliminated|lower }}"
+          data-best-sort="{{ row.best_pick_sort }}"
+          data-champ="{{ row.champ_prob if row.champ_prob is not none else '' }}">
+        <td><strong>{{ row.nation }}</strong></td>
+        <td class="col-code">{{ row.fifa_code }}</td>
+        <td class="col-group"><span class="group-chip group-{{ row.group }}">{{ row.group }}</span></td>
+        <td class="col-pot">{{ row.pot }}</td>
+        <td><span class="conf-chip">{{ row.confederation }}</span></td>
+
+        {% for cell in row.md_cells %}
+        <td class="prob-cell md-cell"
+            data-prob="{{ cell.prob if cell.prob is not none else '' }}"
+            style="background: {{ cell.bg_color }}; color: {{ cell.text_color }};">
+          {% if cell.url %}
+          <a href="{{ cell.url }}" target="_blank" rel="noopener"
+             style="color: {{ cell.text_color }}; text-decoration: none;"
+             title="View on Kalshi">{{ cell.display }}<span class="md-opp">vs {{ cell.opponent }}</span></a>
+          {% else %}
+          {{ cell.display }}<span class="md-opp">vs {{ cell.opponent }}</span>
+          {% endif %}
+        </td>
+        {% endfor %}
+
+        {% for cell in row.ko_cells %}
+        <td class="prob-cell"
+            data-prob="{{ cell.prob if cell.prob is not none else '' }}"
+            title="Game win: {{ cell.cond_display }}"
+            style="background: {{ cell.bg_color }}; color: {{ cell.text_color }};">
+          {% if cell.url %}
+          <a href="{{ cell.url }}" target="_blank" rel="noopener"
+             style="color: {{ cell.text_color }}; text-decoration: none;"
+             title="View on Kalshi">{{ cell.display }}</a>
+          {% else %}
+          {{ cell.display }}
+          {% endif %}
+        </td>
+        {% endfor %}
+
+        <td class="prob-cell"
+            data-champ="{{ row.champ_prob if row.champ_prob is not none else '' }}"
+            style="background: {{ row.champ_bg }}; color: {{ row.champ_text }};">
+          {% if row.champ_url %}
+          <a href="{{ row.champ_url }}" target="_blank" rel="noopener"
+             style="color: {{ row.champ_text }}; text-decoration: none;"
+             title="View on Kalshi">{{ row.champ_display }}</a>
+          {% else %}
+          {{ row.champ_display }}
+          {% endif %}
+        </td>
+
+        <td class="col-best{% if not row.best_pick_is_safe %} best-risky{% endif %}">{{ row.best_pick }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="no-data">
+  <h2>No odds data yet</h2>
+  <p>Waiting for Kalshi World Cup markets to populate. First match: <strong>June 11, 2026</strong>.</p>
+</div>
+{% endif %}
+
+<script>
+// ── Sorting ────────────────────────────────────────────────────────
+let currentSort = { col: null, asc: true };
+
+function sortTable(col) {
+  const table = document.getElementById('odds-table');
+  if (!table) return;
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  if (currentSort.col === col) {
+    currentSort.asc = !currentSort.asc;
+  } else {
+    currentSort.col = col;
+    currentSort.asc = (col === 'nation' || col === 'code' || col === 'group' || col === 'confederation' || col === 'pot');
+  }
+
+  table.querySelectorAll('th').forEach(th => {
+    th.classList.remove('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = '▲';
+  });
+  const th = table.querySelector('th[data-col="' + col + '"]');
+  if (th) {
+    th.classList.add('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = currentSort.asc ? '▲' : '▼';
+  }
+
+  const visibleMd = {{ visible_md | tojson }};
+  const visibleKo = {{ visible_ko | tojson }};
+  const mdIdx = visibleMd.indexOf(col);
+  const koIdx = visibleKo.indexOf(col);
+
+  rows.sort(function(a, b) {
+    var va, vb;
+    if (col === 'nation') {
+      va = a.dataset.nation.toLowerCase();
+      vb = b.dataset.nation.toLowerCase();
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'code') {
+      va = a.dataset.code;
+      vb = b.dataset.code;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'group') {
+      va = a.dataset.group;
+      vb = b.dataset.group;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'confederation') {
+      va = a.dataset.conf;
+      vb = b.dataset.conf;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'pot') {
+      va = parseInt(a.dataset.pot);
+      vb = parseInt(b.dataset.pot);
+    } else if (col === 'best') {
+      va = parseFloat(a.dataset.bestSort || '-1');
+      vb = parseFloat(b.dataset.bestSort || '-1');
+    } else if (col === 'champ') {
+      va = parseFloat(a.dataset.champ || '-1');
+      vb = parseFloat(b.dataset.champ || '-1');
+    } else if (mdIdx >= 0) {
+      // MD cells come first in .prob-cell ordering
+      var cellA = a.querySelectorAll('.prob-cell')[mdIdx];
+      var cellB = b.querySelectorAll('.prob-cell')[mdIdx];
+      va = cellA ? parseFloat(cellA.dataset.prob || '-1') : -1;
+      vb = cellB ? parseFloat(cellB.dataset.prob || '-1') : -1;
+    } else if (koIdx >= 0) {
+      // KO cells come after MD cells
+      var offset = visibleMd.length + koIdx;
+      var cellA = a.querySelectorAll('.prob-cell')[offset];
+      var cellB = b.querySelectorAll('.prob-cell')[offset];
+      va = cellA ? parseFloat(cellA.dataset.prob || '-1') : -1;
+      vb = cellB ? parseFloat(cellB.dataset.prob || '-1') : -1;
+    } else {
+      return 0;
+    }
+    if (va < vb) return currentSort.asc ? -1 : 1;
+    if (va > vb) return currentSort.asc ? 1 : -1;
+    return 0;
+  });
+  rows.forEach(function(r) { tbody.appendChild(r); });
+}
+
+// ── Filtering ──────────────────────────────────────────────────────
+function applyFilters() {
+  var group = document.getElementById('filter-group').value;
+  var pot = document.getElementById('filter-pot').value;
+  var conf = document.getElementById('filter-conf').value;
+  var search = document.getElementById('filter-search').value.toLowerCase();
+  var showEliminated = document.getElementById('filter-eliminated').checked;
+
+  var table = document.getElementById('odds-table');
+  if (!table) return;
+  table.querySelectorAll('tbody tr').forEach(function(row) {
+    var show = true;
+    if (group && row.dataset.group !== group) show = false;
+    if (pot && row.dataset.pot !== pot) show = false;
+    if (conf && row.dataset.conf !== conf) show = false;
+    if (search && !(row.dataset.nation + ' ' + row.dataset.code).toLowerCase().includes(search)) show = false;
+    if (!showEliminated && row.dataset.eliminated === 'true') show = false;
+    row.style.display = show ? '' : 'none';
+  });
+}
+applyFilters();
+
+// ── CSV export ─────────────────────────────────────────────────────
+function exportCsv() {
+  var table = document.getElementById('odds-table');
+  if (!table) return;
+  var headers = [];
+  table.querySelectorAll('thead th').forEach(function(th) {
+    var t = th.textContent.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/ [▲▼].*/, '').replace(/\si$/, '').trim();
+    headers.push('"' + t + '"');
+  });
+  var rows = [headers.join(',')];
+  table.querySelectorAll('tbody tr').forEach(function(tr) {
+    if (tr.style.display === 'none') return;
+    var cells = [];
+    tr.querySelectorAll('td').forEach(function(td) {
+      var text = td.textContent.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+      // Convert "53%" → "0.53"
+      text = text.replace(/(-?\d+(?:\.\d+)?)%/g, function(_, n) {
+        var d = parseFloat(n) / 100;
+        return isFinite(d) ? d.toFixed(4).replace(/\.?(0+)$/, '') : n + '%';
+      });
+      cells.push('"' + text.replace(/"/g, '""') + '"');
+    });
+    rows.push(cells.join(','));
+  });
+  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'world_cup_odds.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── Floating tooltip for info icons ────────────────────────────────
+(function() {
+  var tip = document.createElement('div');
+  tip.id = 'floating-tooltip';
+  document.body.appendChild(tip);
+  document.querySelectorAll('.info-tip[data-tip]').forEach(function(el) {
+    el.addEventListener('mouseenter', function(e) {
+      e.stopPropagation();
+      tip.textContent = el.getAttribute('data-tip');
+      tip.style.display = 'block';
+      var rect = el.getBoundingClientRect();
+      var tipRect = tip.getBoundingClientRect();
+      var left = rect.left + rect.width / 2 - tipRect.width / 2;
+      var top = rect.top - tipRect.height - 10;
+      if (top < 4) top = rect.bottom + 10;
+      if (left < 4) left = 4;
+      if (left + tipRect.width > window.innerWidth - 4) {
+        left = window.innerWidth - tipRect.width - 4;
+      }
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+    });
+    el.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    el.addEventListener('click', function(e) { e.stopPropagation(); });
+  });
+})();
+</script>
+
+</body>
+</html>

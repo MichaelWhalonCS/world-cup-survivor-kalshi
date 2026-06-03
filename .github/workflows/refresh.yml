@@ -1,0 +1,46 @@
+name: Refresh World Cup Odds
+
+on:
+  schedule:
+    # Every hour at :05
+    - cron: '5 * * * *'
+  workflow_dispatch:  # Manual trigger from Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write Kalshi private key to file
+        run: |
+          mkdir -p secrets
+          echo "${{ secrets.KALSHI_PRIVATE_KEY }}" > secrets/kalshi_private_key.pem
+
+      - name: Create .env file
+        run: |
+          echo "KALSHI_API_KEY_ID=${{ secrets.KALSHI_API_KEY_ID }}" > .env
+          echo "KALSHI_PRIVATE_KEY_PATH=secrets/kalshi_private_key.pem" >> .env
+          echo "KALSHI_BASE_URL=https://api.elections.kalshi.com/trade-api/v2" >> .env
+
+      - name: Run refresh script
+        run: python scripts/refresh.py
+
+      - name: Commit and push updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html data/snapshots/
+          git diff --cached --quiet || (git commit -m "Auto-refresh odds $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)

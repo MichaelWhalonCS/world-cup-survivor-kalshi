@@ -1,0 +1,5458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 World Cup Survivor — Kalshi Odds</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .header {
+    max-width: 1600px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .header .meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .header .meta span { margin-right: 1.5rem; }
+
+  /* ── Info section ────────────────────────────────────── */
+  .info-section {
+    max-width: 1600px;
+    margin: 0 auto 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .info-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .info-toggle:hover { color: var(--accent); }
+  .info-toggle .chevron { font-size: 0.65rem; transition: transform 0.2s; }
+  .info-toggle.open .chevron { transform: rotate(90deg); }
+
+  .info-body {
+    display: none;
+    padding: 0 1rem 1rem;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .info-body.open { display: block; }
+
+  .info-body h3 {
+    color: var(--text);
+    font-size: 0.85rem;
+    margin: 1rem 0 0.4rem;
+  }
+  .info-body h3:first-child { margin-top: 0; }
+  .info-body ul { margin-left: 1.2rem; margin-bottom: 0.5rem; }
+  .info-body li { margin-bottom: 0.25rem; }
+  .info-body strong { color: var(--text); }
+  .info-body code {
+    background: var(--bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.78rem;
+  }
+  .info-body a { color: var(--accent); text-decoration: none; }
+  .info-body a:hover { text-decoration: underline; }
+
+  /* ── Filter bar ──────────────────────────────────────── */
+  .filters {
+    max-width: 1600px;
+    margin: 0 auto 1rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .filters select, .filters input {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .filters input[type="text"] { width: 160px; }
+
+  /* ── Table ───────────────────────────────────────────── */
+  .table-wrap {
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  thead { position: sticky; top: 0; z-index: 2; }
+
+  th {
+    background: var(--surface);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    text-align: left;
+  }
+
+  th:hover { color: var(--accent); }
+  th .sort-arrow { margin-left: 0.3rem; font-size: 0.6rem; opacity: 0.4; }
+  th.sorted .sort-arrow { opacity: 1; }
+
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: rgba(88, 166, 255, 0.05); }
+  tr.eliminated td { opacity: 0.35; text-decoration: line-through; }
+
+  .col-code { text-align: center; width: 3.5rem; font-weight: 600; }
+  .col-group { text-align: center; width: 3rem; }
+  .col-pot { text-align: center; width: 3rem; }
+
+  .prob-cell {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    min-width: 4.5rem;
+    cursor: default;
+  }
+
+  .md-cell .md-opp {
+    display: block;
+    font-size: 0.65rem;
+    opacity: 0.75;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .col-best { font-weight: 600; color: var(--accent); }
+  .col-best.best-risky {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .prob-cell a {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .prob-cell a:hover { text-decoration: underline; }
+
+  /* ── Group color chips (A–L) ─────────────────────────── */
+  .group-chip {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  /* Cycle colors for 12 groups */
+  .group-A { background: #1f3d5c; color: #58a6ff; }
+  .group-B { background: #3b2a1a; color: #f0883e; }
+  .group-C { background: #1a3a2a; color: #3fb950; }
+  .group-D { background: #3a1f3a; color: #d2a8ff; }
+  .group-E { background: #2a1f3a; color: #a371f7; }
+  .group-F { background: #3a3a1f; color: #e3b341; }
+  .group-G { background: #1f3a3a; color: #56d4dd; }
+  .group-H { background: #3a1f2a; color: #ff7b72; }
+  .group-I { background: #2a3a1f; color: #7ee787; }
+  .group-J { background: #1f2a3a; color: #79c0ff; }
+  .group-K { background: #3a2a1f; color: #ffa657; }
+  .group-L { background: #2a1f1f; color: #ff9492; }
+
+  .conf-chip {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Info icon ───────────────────────────────────────── */
+  .info-tip { display: inline-block; margin-left: 0.3rem; cursor: help; }
+  .info-tip .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--text-muted);
+    font-size: 0.55rem;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    vertical-align: middle;
+  }
+  .info-tip:hover .info-icon { border-color: var(--accent); color: var(--accent); }
+
+  #floating-tooltip {
+    display: none;
+    position: fixed;
+    background: #2d333b;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.5;
+    white-space: normal;
+    max-width: 280px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  /* ── No-data state ───────────────────────────────────── */
+  .no-data {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+  }
+  .no-data h2 { margin-bottom: 0.5rem; }
+
+  /* ── CSV export ───────────────────────────────────────── */
+  .csv-btn {
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .csv-btn:hover { background: var(--border); border-color: var(--accent); }
+
+  @media (max-width: 768px) {
+    body { padding: 0.5rem; }
+    .header h1 { font-size: 1.2rem; }
+    table { font-size: 0.75rem; }
+    td, th { padding: 0.35rem 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚽ 2026 World Cup Survivor — Kalshi Odds</h1>
+  <div class="meta">
+    <span>Last updated: 2026-06-02 09:20 PM CDT</span>
+    <span>48 nations</span>
+    <span>Current round: <strong>MD1</strong></span>
+    <span>Source: <a href="https://kalshi.com/category/sports/soccer" style="color:var(--accent)" target="_blank" rel="noopener">Kalshi Soccer Markets</a></span>
+  </div>
+</div>
+
+<!-- ── Info ──────────────────────────────────────────────────────── -->
+<div class="info-section">
+  <div class="info-toggle" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+    <span class="chevron">&#9654;</span> How World Cup Survivor Pools Work &amp; How to Read This Table
+  </div>
+  <div class="info-body">
+    <h3>Format</h3>
+    <ul>
+      <li><strong>48 nations in 12 groups of 4</strong> (new expanded format). Each team plays 3 group matches.</li>
+      <li><strong>Top 2 from each group + 8 best 3rd-place finishers</strong> advance to the Round of 32, then knockout to the Final.</li>
+      <li>Group matches can end in a <strong>draw</strong> — only outright wins help your survivor pick.</li>
+    </ul>
+
+    <h3>How Survivor Pools Work (World Cup variant)</h3>
+    <ul>
+      <li><strong>Group stage</strong> — pick one nation per matchday whose game you think they'll win outright. A draw is treated as a loss for survivor purposes.</li>
+      <li><strong>Knockout</strong> — pick one nation per round who you think will win their game (after 90/120 mins or penalties).</li>
+      <li><strong>Each nation may only be used once</strong> over the entire tournament. Save your top seeds for the rounds where you actually need them.</li>
+    </ul>
+
+    <h3>Data Sources</h3>
+    <ul>
+      <li><strong>Kalshi per-game markets</strong> — for each group match, Kalshi lists separate "Team A wins" / "Team B wins" / "Draw" contracts. The MD1/MD2/MD3 columns show the last-traded YES price on the team-wins contract.</li>
+      <li><strong>Kalshi advancement futures</strong> — "Will Brazil reach the Quarterfinals?", etc. The Make R16, Make QF, Make SF, Make Final columns are the implied cumulative advancement probability for that round.</li>
+      <li><strong>Champion futures</strong> — Kalshi's "winner of the 2026 World Cup" event.</li>
+    </ul>
+
+    <h3>How the Numbers Are Calculated</h3>
+    <ul>
+      <li><strong>Cumulative probabilities</strong> (the KO round columns) come straight from advancement futures.</li>
+      <li><strong>Conditional (game-win) probabilities</strong> are derived by dividing consecutive rounds:
+        <code>P(win R16 game) = P(reach QF) / P(reach R16)</code>.</li>
+      <li><strong>Group-stage probabilities</strong> are per-game team-win prices (the MD1/MD2/MD3 columns); they are <em>not</em> cumulative because every team plays all 3 matchdays regardless of earlier results.</li>
+      <li><strong>Best Pick</strong> = the latest round where this team's per-game win probability is ≥ 65%. (Lower threshold than basketball because draws compress per-game soccer win rates.)</li>
+    </ul>
+
+    <h3>Strategy Tips</h3>
+    <ul>
+      <li>Group-stage win rates are <em>lower</em> than basketball — a top seed against a Pot 4 opponent might only price at 65–75% because of the draw possibility.</li>
+      <li>Don't waste a Pot 1 nation on MD1 if their MD3 opponent is much weaker — check all three matchdays in the row.</li>
+      <li>R32 and R16 are the "easy" knockout rounds for top seeds. QF onwards is where favourites get squeezed.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── Filter bar ────────────────────────────────────────────────── -->
+<div class="filters">
+  <button class="csv-btn" onclick="exportCsv()" title="Export visible table to CSV">⬇ Export CSV</button>
+
+  <label for="filter-group">Group:</label>
+  <select id="filter-group" onchange="applyFilters()">
+    <option value="">All</option>
+    
+    <option value="A">A</option>
+    
+    <option value="B">B</option>
+    
+    <option value="C">C</option>
+    
+    <option value="D">D</option>
+    
+    <option value="E">E</option>
+    
+    <option value="F">F</option>
+    
+    <option value="G">G</option>
+    
+    <option value="H">H</option>
+    
+    <option value="I">I</option>
+    
+    <option value="J">J</option>
+    
+    <option value="K">K</option>
+    
+    <option value="L">L</option>
+    
+  </select>
+
+  <label for="filter-pot">Pot:</label>
+  <select id="filter-pot" onchange="applyFilters()">
+    <option value="">All</option>
+    <option value="1">Pot 1</option>
+    <option value="2">Pot 2</option>
+    <option value="3">Pot 3</option>
+    <option value="4">Pot 4</option>
+  </select>
+
+  <label for="filter-conf">Confed:</label>
+  <select id="filter-conf" onchange="applyFilters()">
+    <option value="">All</option>
+    
+    <option value="AFC">AFC</option>
+    
+    <option value="CAF">CAF</option>
+    
+    <option value="CONCACAF">CONCACAF</option>
+    
+    <option value="CONMEBOL">CONMEBOL</option>
+    
+    <option value="OFC">OFC</option>
+    
+    <option value="UEFA">UEFA</option>
+    
+  </select>
+
+  <label for="filter-search">Search:</label>
+  <input type="text" id="filter-search" placeholder="Nation or code…" oninput="applyFilters()">
+
+  <label>
+    <input type="checkbox" id="filter-eliminated" onchange="applyFilters()">
+    Show eliminated
+  </label>
+</div>
+
+
+<div class="table-wrap">
+  <table id="odds-table">
+    <thead>
+      <tr>
+        <th data-col="nation" onclick="sortTable('nation')">Nation <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="code" class="col-code" onclick="sortTable('code')">Code <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="group" class="col-group" onclick="sortTable('group')">Group <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="pot" class="col-pot" onclick="sortTable('pot')">Pot <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="confederation" onclick="sortTable('confederation')">Confed <span class="sort-arrow">&#9650;</span></th>
+
+        
+        <th data-col="MD1" onclick="sortTable('MD1')">
+          Matchday 1
+          <span class="info-tip" data-tip="Kalshi per-game market price: probability this nation wins their MD1 group match outright (a draw counts as a loss for survivor).">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="MD2" onclick="sortTable('MD2')">
+          Matchday 2
+          <span class="info-tip" data-tip="Kalshi per-game market price: probability this nation wins their MD2 group match outright (a draw counts as a loss for survivor).">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="MD3" onclick="sortTable('MD3')">
+          Matchday 3
+          <span class="info-tip" data-tip="Kalshi per-game market price: probability this nation wins their MD3 group match outright (a draw counts as a loss for survivor).">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+
+        
+        <th data-col="R32" onclick="sortTable('R32')">
+          Make R16
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="R16" onclick="sortTable('R16')">
+          Make QF
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="QF" onclick="sortTable('QF')">
+          Make SF
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="SF" onclick="sortTable('SF')">
+          Make Final
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+        <th data-col="Final" onclick="sortTable('Final')">
+          Win Title
+          <span class="info-tip" data-tip="Cumulative probability of reaching this stage of the tournament, from Kalshi advancement futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+        
+
+        <th data-col="champ" onclick="sortTable('champ')">
+          Win Cup
+          <span class="info-tip" data-tip="Implied probability this nation wins the entire World Cup, from Kalshi's tournament-winner futures.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+
+        <th data-col="best" onclick="sortTable('best')">
+          Best Pick
+          <span class="info-tip" data-tip="The latest round where this nation has ≥65% per-game win probability — i.e. the most strategic round to spend this nation in your survivor pool. Bold blue = safe (≥65%). Italic gray = no safe round; shows the best available.">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr class=""
+          data-nation="Mexico"
+          data-code="MEX"
+          data-group="A"
+          data-pot="1"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="40.6508479619161"
+          data-champ="0.072">
+        <td><strong>Mexico</strong></td>
+        <td class="col-code">MEX</td>
+        <td class="col-group"><span class="group-chip group-A">A</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.489"
+            style="background: rgb(180,216,50); color: #1a1a1a;">
+          
+          48.9%<span class="md-opp">vs NOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.55"
+            style="background: rgb(166,216,53); color: #1a1a1a;">
+          
+          55.0%<span class="md-opp">vs EGY</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.552"
+            style="background: rgb(165,215,53); color: #1a1a1a;">
+          
+          55.2%<span class="md-opp">vs NZL</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9531"
+            title="Game win: 70.5%"
+            style="background: rgb(53,183,77); color: #ffffff;">
+          
+          95.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.6722"
+            title="Game win: 65.1%"
+            style="background: rgb(131,206,60); color: #1a1a1a;">
+          
+          67.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4375"
+            title="Game win: 57.7%"
+            style="background: rgb(185,200,51); color: #1a1a1a;">
+          
+          43.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2525"
+            title="Game win: 51.8%"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1307"
+            title="Game win: 55.1%"
+            style="background: rgb(209,101,57); color: #ffffff;">
+          
+          13.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.072"
+            style="background: rgb(214,83,58); color: #ffffff;">
+          
+          7.2%
+          
+        </td>
+
+        <td class="col-best">R16 (65.1%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Norway"
+          data-code="NOR"
+          data-group="A"
+          data-pot="2"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.463"
+          data-champ="0.0206">
+        <td><strong>Norway</strong></td>
+        <td class="col-code">NOR</td>
+        <td class="col-group"><span class="group-chip group-A">A</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.428"
+            style="background: rgb(185,196,51); color: #1a1a1a;">
+          
+          42.8%<span class="md-opp">vs MEX</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.457"
+            style="background: rgb(183,206,50); color: #1a1a1a;">
+          
+          45.7%<span class="md-opp">vs NZL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.463"
+            style="background: rgb(182,208,50); color: #1a1a1a;">
+          
+          46.3%<span class="md-opp">vs EGY</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7688"
+            title="Game win: 59.0%"
+            style="background: rgb(104,198,66); color: #1a1a1a;">
+          
+          76.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4539"
+            title="Game win: 47.2%"
+            style="background: rgb(183,205,50); color: #1a1a1a;">
+          
+          45.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2143"
+            title="Game win: 47.2%"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1011"
+            title="Game win: 38.0%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0384"
+            title="Game win: 53.6%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          3.8%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0206"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs EGY (46.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Egypt"
+          data-code="EGY"
+          data-group="A"
+          data-pot="3"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="10.37"
+          data-champ="0.0052">
+        <td><strong>Egypt</strong></td>
+        <td class="col-code">EGY</td>
+        <td class="col-group"><span class="group-chip group-A">A</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.312"
+            style="background: rgb(195,159,53); color: #1a1a1a;">
+          
+          31.2%<span class="md-opp">vs NZL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.37"
+            style="background: rgb(190,178,52); color: #1a1a1a;">
+          
+          37.0%<span class="md-opp">vs MEX</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.35"
+            style="background: rgb(192,172,53); color: #1a1a1a;">
+          
+          35.0%<span class="md-opp">vs NOR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5599"
+            title="Game win: 43.4%"
+            style="background: rgb(163,215,53); color: #1a1a1a;">
+          
+          56.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2428"
+            title="Game win: 40.2%"
+            style="background: rgb(200,137,55); color: #1a1a1a;">
+          
+          24.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0975"
+            title="Game win: 32.2%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0314"
+            title="Game win: 33.1%"
+            style="background: rgb(217,70,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0104"
+            title="Game win: 50.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0052"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs MEX (37.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="New Zealand"
+          data-code="NZL"
+          data-group="A"
+          data-pot="4"
+          data-conf="OFC"
+          data-eliminated="false"
+          data-best-sort="0.3"
+          data-champ="0.001">
+        <td><strong>New Zealand</strong></td>
+        <td class="col-code">NZL</td>
+        <td class="col-group"><span class="group-chip group-A">A</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">OFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.3"
+            style="background: rgb(196,156,54); color: #1a1a1a;">
+          
+          30.0%<span class="md-opp">vs EGY</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.222"
+            style="background: rgb(202,131,55); color: #1a1a1a;">
+          
+          22.2%<span class="md-opp">vs NOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.152"
+            style="background: rgb(207,108,56); color: #1a1a1a;">
+          
+          15.2%<span class="md-opp">vs MEX</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2952"
+            title="Game win: 34.1%"
+            style="background: rgb(196,154,54); color: #1a1a1a;">
+          
+          29.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1006"
+            title="Game win: 29.2%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0294"
+            title="Game win: 34.0%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          2.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.01"
+            title="Game win: 21.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0021"
+            title="Game win: 47.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs EGY (30.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Canada"
+          data-code="CAN"
+          data-group="B"
+          data-pot="1"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="30.765483799867756"
+          data-champ="0.0673">
+        <td><strong>Canada</strong></td>
+        <td class="col-code">CAN</td>
+        <td class="col-group"><span class="group-chip group-B">B</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.562"
+            style="background: rgb(162,215,53); color: #1a1a1a;">
+          
+          56.2%<span class="md-opp">vs SUI</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.474"
+            style="background: rgb(182,211,50); color: #1a1a1a;">
+          
+          47.4%<span class="md-opp">vs TUN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.584"
+            style="background: rgb(156,213,55); color: #1a1a1a;">
+          
+          58.4%<span class="md-opp">vs IRQ</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9074"
+            title="Game win: 76.5%"
+            style="background: rgb(65,187,74); color: #ffffff;">
+          
+          90.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.6946"
+            title="Game win: 64.1%"
+            style="background: rgb(125,204,61); color: #1a1a1a;">
+          
+          69.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4454"
+            title="Game win: 56.6%"
+            style="background: rgb(184,202,51); color: #1a1a1a;">
+          
+          44.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2521"
+            title="Game win: 51.6%"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.13"
+            title="Game win: 51.8%"
+            style="background: rgb(209,101,57); color: #ffffff;">
+          
+          13.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0673"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.7%
+          
+        </td>
+
+        <td class="col-best">R32 (76.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Switzerland"
+          data-code="SUI"
+          data-group="B"
+          data-pot="2"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.46"
+          data-champ="0.02">
+        <td><strong>Switzerland</strong></td>
+        <td class="col-code">SUI</td>
+        <td class="col-group"><span class="group-chip group-B">B</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.421"
+            style="background: rgb(186,194,51); color: #1a1a1a;">
+          
+          42.1%<span class="md-opp">vs CAN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.46"
+            style="background: rgb(183,207,50); color: #1a1a1a;">
+          
+          46.0%<span class="md-opp">vs IRQ</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.436"
+            style="background: rgb(185,199,51); color: #1a1a1a;">
+          
+          43.6%<span class="md-opp">vs TUN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7493"
+            title="Game win: 62.6%"
+            style="background: rgb(110,200,64); color: #1a1a1a;">
+          
+          74.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4688"
+            title="Game win: 45.8%"
+            style="background: rgb(182,210,50); color: #1a1a1a;">
+          
+          46.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2147"
+            title="Game win: 46.2%"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0992"
+            title="Game win: 42.0%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0417"
+            title="Game win: 48.0%"
+            style="background: rgb(216,73,59); color: #ffffff;">
+          
+          4.2%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.02"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.0%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs IRQ (46.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Tunisia"
+          data-code="TUN"
+          data-group="B"
+          data-pot="3"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="0.323"
+          data-champ="0.0051">
+        <td><strong>Tunisia</strong></td>
+        <td class="col-code">TUN</td>
+        <td class="col-group"><span class="group-chip group-B">B</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.323"
+            style="background: rgb(194,163,53); color: #1a1a1a;">
+          
+          32.3%<span class="md-opp">vs IRQ</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.244"
+            style="background: rgb(200,138,55); color: #1a1a1a;">
+          
+          24.4%<span class="md-opp">vs CAN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.276"
+            style="background: rgb(197,148,54); color: #1a1a1a;">
+          
+          27.6%<span class="md-opp">vs SUI</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5296"
+            title="Game win: 45.1%"
+            style="background: rgb(171,217,51); color: #1a1a1a;">
+          
+          53.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2387"
+            title="Game win: 42.7%"
+            style="background: rgb(200,136,55); color: #1a1a1a;">
+          
+          23.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.102"
+            title="Game win: 30.6%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0312"
+            title="Game win: 30.8%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0096"
+            title="Game win: 53.1%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0051"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs IRQ (32.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Iraq"
+          data-code="IRQ"
+          data-group="B"
+          data-pot="4"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="10.217"
+          data-champ="0.001">
+        <td><strong>Iraq</strong></td>
+        <td class="col-code">IRQ</td>
+        <td class="col-group"><span class="group-chip group-B">B</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.215"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.5%<span class="md-opp">vs TUN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.217"
+            style="background: rgb(202,129,55); color: #1a1a1a;">
+          
+          21.7%<span class="md-opp">vs SUI</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.177"
+            style="background: rgb(205,116,56); color: #1a1a1a;">
+          
+          17.7%<span class="md-opp">vs CAN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.3116"
+            title="Game win: 32.5%"
+            style="background: rgb(195,159,53); color: #1a1a1a;">
+          
+          31.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1013"
+            title="Game win: 29.5%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0299"
+            title="Game win: 33.4%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.01"
+            title="Game win: 21.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0021"
+            title="Game win: 47.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs SUI (21.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="USA"
+          data-code="USA"
+          data-group="C"
+          data-pot="1"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="30.799069045771915"
+          data-champ="0.0695">
+        <td><strong>USA</strong></td>
+        <td class="col-code">USA</td>
+        <td class="col-group"><span class="group-chip group-C">C</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.557"
+            style="background: rgb(164,215,53); color: #1a1a1a;">
+          
+          55.7%<span class="md-opp">vs JPN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.56"
+            style="background: rgb(163,215,53); color: #1a1a1a;">
+          
+          56.0%<span class="md-opp">vs CZE</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.577"
+            style="background: rgb(158,213,54); color: #1a1a1a;">
+          
+          57.7%<span class="md-opp">vs CPV</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9023"
+            title="Game win: 79.9%"
+            style="background: rgb(67,187,74); color: #ffffff;">
+          
+          90.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.721"
+            title="Game win: 62.4%"
+            style="background: rgb(118,202,63); color: #1a1a1a;">
+          
+          72.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4501"
+            title="Game win: 55.4%"
+            style="background: rgb(183,204,50); color: #1a1a1a;">
+          
+          45.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2495"
+            title="Game win: 54.1%"
+            style="background: rgb(200,139,55); color: #1a1a1a;">
+          
+          24.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.135"
+            title="Game win: 51.5%"
+            style="background: rgb(209,103,57); color: #ffffff;">
+          
+          13.5%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0695"
+            style="background: rgb(214,82,58); color: #ffffff;">
+          
+          7.0%
+          
+        </td>
+
+        <td class="col-best">R32 (79.9%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Japan"
+          data-code="JPN"
+          data-group="C"
+          data-pot="2"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="0.387"
+          data-champ="0.0208">
+        <td><strong>Japan</strong></td>
+        <td class="col-code">JPN</td>
+        <td class="col-group"><span class="group-chip group-C">C</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.387"
+            style="background: rgb(189,183,52); color: #1a1a1a;">
+          
+          38.7%<span class="md-opp">vs USA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.383"
+            style="background: rgb(189,182,52); color: #1a1a1a;">
+          
+          38.3%<span class="md-opp">vs CPV</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.345"
+            style="background: rgb(192,170,53); color: #1a1a1a;">
+          
+          34.5%<span class="md-opp">vs CZE</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7617"
+            title="Game win: 59.7%"
+            style="background: rgb(106,199,65); color: #1a1a1a;">
+          
+          76.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4544"
+            title="Game win: 48.2%"
+            style="background: rgb(183,205,50); color: #1a1a1a;">
+          
+          45.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2191"
+            title="Game win: 45.7%"
+            style="background: rgb(202,130,55); color: #1a1a1a;">
+          
+          21.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1002"
+            title="Game win: 39.9%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.04"
+            title="Game win: 52.0%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          4.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0208"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs USA (38.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Czechia"
+          data-code="CZE"
+          data-group="C"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.322"
+          data-champ="0.0049">
+        <td><strong>Czechia</strong></td>
+        <td class="col-code">CZE</td>
+        <td class="col-group"><span class="group-chip group-C">C</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.282"
+            style="background: rgb(197,150,54); color: #1a1a1a;">
+          
+          28.2%<span class="md-opp">vs CPV</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.318"
+            style="background: rgb(194,161,53); color: #1a1a1a;">
+          
+          31.8%<span class="md-opp">vs USA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.322"
+            style="background: rgb(194,163,53); color: #1a1a1a;">
+          
+          32.2%<span class="md-opp">vs JPN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5679"
+            title="Game win: 45.4%"
+            style="background: rgb(160,214,54); color: #1a1a1a;">
+          
+          56.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2577"
+            title="Game win: 39.0%"
+            style="background: rgb(199,142,54); color: #1a1a1a;">
+          
+          25.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1006"
+            title="Game win: 31.0%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0312"
+            title="Game win: 33.0%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0103"
+            title="Game win: 47.6%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0049"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs JPN (32.2%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Cape Verde"
+          data-code="CPV"
+          data-group="C"
+          data-pot="4"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="0.287"
+          data-champ="0.001">
+        <td><strong>Cape Verde</strong></td>
+        <td class="col-code">CPV</td>
+        <td class="col-group"><span class="group-chip group-C">C</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.287"
+            style="background: rgb(197,151,54); color: #1a1a1a;">
+          
+          28.7%<span class="md-opp">vs CZE</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.156"
+            style="background: rgb(207,109,56); color: #1a1a1a;">
+          
+          15.6%<span class="md-opp">vs JPN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.25"
+            style="background: rgb(200,140,55); color: #1a1a1a;">
+          
+          25.0%<span class="md-opp">vs USA</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.3086"
+            title="Game win: 32.5%"
+            style="background: rgb(195,158,53); color: #1a1a1a;">
+          
+          30.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1002"
+            title="Game win: 29.8%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0299"
+            title="Game win: 35.1%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0105"
+            title="Game win: 20.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0021"
+            title="Game win: 47.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs CZE (28.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Argentina"
+          data-code="ARG"
+          data-group="D"
+          data-pot="1"
+          data-conf="CONMEBOL"
+          data-eliminated="false"
+          data-best-sort="40.686364989580234"
+          data-champ="0.0666">
+        <td><strong>Argentina</strong></td>
+        <td class="col-code">ARG</td>
+        <td class="col-group"><span class="group-chip group-D">D</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">CONMEBOL</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.547"
+            style="background: rgb(166,216,52); color: #1a1a1a;">
+          
+          54.7%<span class="md-opp">vs CRO</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.48"
+            style="background: rgb(181,213,50); color: #1a1a1a;">
+          
+          48.0%<span class="md-opp">vs ECU</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.513"
+            style="background: rgb(176,218,50); color: #1a1a1a;">
+          
+          51.3%<span class="md-opp">vs JOR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9199"
+            title="Game win: 73.0%"
+            style="background: rgb(62,186,75); color: #ffffff;">
+          
+          92.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.6718"
+            title="Game win: 68.6%"
+            style="background: rgb(131,206,60); color: #1a1a1a;">
+          
+          67.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4611"
+            title="Game win: 53.7%"
+            style="background: rgb(183,207,50); color: #1a1a1a;">
+          
+          46.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2478"
+            title="Game win: 52.2%"
+            style="background: rgb(200,139,55); color: #1a1a1a;">
+          
+          24.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1293"
+            title="Game win: 51.5%"
+            style="background: rgb(209,101,57); color: #ffffff;">
+          
+          12.9%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0666"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.7%
+          
+        </td>
+
+        <td class="col-best">R16 (68.6%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Croatia"
+          data-code="CRO"
+          data-group="D"
+          data-pot="2"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.489"
+          data-champ="0.0209">
+        <td><strong>Croatia</strong></td>
+        <td class="col-code">CRO</td>
+        <td class="col-group"><span class="group-chip group-D">D</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.34"
+            style="background: rgb(192,168,53); color: #1a1a1a;">
+          
+          34.0%<span class="md-opp">vs ARG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.433"
+            style="background: rgb(185,198,51); color: #1a1a1a;">
+          
+          43.3%<span class="md-opp">vs JOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.489"
+            style="background: rgb(180,216,50); color: #1a1a1a;">
+          
+          48.9%<span class="md-opp">vs ECU</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7187"
+            title="Game win: 64.4%"
+            style="background: rgb(118,202,63); color: #1a1a1a;">
+          
+          71.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4632"
+            title="Game win: 46.3%"
+            style="background: rgb(182,208,50); color: #1a1a1a;">
+          
+          46.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2145"
+            title="Game win: 47.2%"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1012"
+            title="Game win: 40.5%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.041"
+            title="Game win: 51.0%"
+            style="background: rgb(216,73,59); color: #ffffff;">
+          
+          4.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0209"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs ECU (48.9%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Ecuador"
+          data-code="ECU"
+          data-group="D"
+          data-pot="3"
+          data-conf="CONMEBOL"
+          data-eliminated="false"
+          data-best-sort="0.347"
+          data-champ="0.0051">
+        <td><strong>Ecuador</strong></td>
+        <td class="col-code">ECU</td>
+        <td class="col-group"><span class="group-chip group-D">D</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CONMEBOL</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.347"
+            style="background: rgb(192,171,53); color: #1a1a1a;">
+          
+          34.7%<span class="md-opp">vs JOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.342"
+            style="background: rgb(192,169,53); color: #1a1a1a;">
+          
+          34.2%<span class="md-opp">vs ARG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.265"
+            style="background: rgb(198,144,54); color: #1a1a1a;">
+          
+          26.5%<span class="md-opp">vs CRO</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5397"
+            title="Game win: 46.7%"
+            style="background: rgb(168,216,52); color: #1a1a1a;">
+          
+          54.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2521"
+            title="Game win: 40.7%"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1027"
+            title="Game win: 30.5%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0313"
+            title="Game win: 31.9%"
+            style="background: rgb(217,70,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.01"
+            title="Game win: 51.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0051"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs JOR (34.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Jordan"
+          data-code="JOR"
+          data-group="D"
+          data-pot="4"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="20.234"
+          data-champ="0.001">
+        <td><strong>Jordan</strong></td>
+        <td class="col-code">JOR</td>
+        <td class="col-group"><span class="group-chip group-D">D</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.162"
+            style="background: rgb(207,111,56); color: #1a1a1a;">
+          
+          16.2%<span class="md-opp">vs ECU</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.176"
+            style="background: rgb(205,116,56); color: #1a1a1a;">
+          
+          17.6%<span class="md-opp">vs CRO</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.234"
+            style="background: rgb(201,134,55); color: #1a1a1a;">
+          
+          23.4%<span class="md-opp">vs ARG</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.3137"
+            title="Game win: 33.1%"
+            style="background: rgb(194,160,53); color: #1a1a1a;">
+          
+          31.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1038"
+            title="Game win: 28.9%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.03"
+            title="Game win: 32.0%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0096"
+            title="Game win: 20.8%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.002"
+            title="Game win: 50.0%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs ARG (23.4%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Spain"
+          data-code="ESP"
+          data-group="E"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="30.791314837153198"
+          data-champ="0.0672">
+        <td><strong>Spain</strong></td>
+        <td class="col-code">ESP</td>
+        <td class="col-group"><span class="group-chip group-E">E</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.595"
+            style="background: rgb(153,212,55); color: #1a1a1a;">
+          
+          59.5%<span class="md-opp">vs MAR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.616"
+            style="background: rgb(147,210,56); color: #1a1a1a;">
+          
+          61.6%<span class="md-opp">vs KOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.519"
+            style="background: rgb(174,218,51); color: #1a1a1a;">
+          
+          51.9%<span class="md-opp">vs UZB</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9119"
+            title="Game win: 79.1%"
+            style="background: rgb(64,187,74); color: #ffffff;">
+          
+          91.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.7216"
+            title="Game win: 62.5%"
+            style="background: rgb(117,202,63); color: #1a1a1a;">
+          
+          72.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4509"
+            title="Game win: 53.8%"
+            style="background: rgb(183,204,50); color: #1a1a1a;">
+          
+          45.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2424"
+            title="Game win: 51.0%"
+            style="background: rgb(200,137,55); color: #1a1a1a;">
+          
+          24.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1237"
+            title="Game win: 54.3%"
+            style="background: rgb(210,99,57); color: #ffffff;">
+          
+          12.4%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0672"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.7%
+          
+        </td>
+
+        <td class="col-best">R32 (79.1%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Morocco"
+          data-code="MAR"
+          data-group="E"
+          data-pot="2"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="0.482"
+          data-champ="0.0196">
+        <td><strong>Morocco</strong></td>
+        <td class="col-code">MAR</td>
+        <td class="col-group"><span class="group-chip group-E">E</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.482"
+            style="background: rgb(181,214,50); color: #1a1a1a;">
+          
+          48.2%<span class="md-opp">vs ESP</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.348"
+            style="background: rgb(192,171,53); color: #1a1a1a;">
+          
+          34.8%<span class="md-opp">vs UZB</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.396"
+            style="background: rgb(188,186,52); color: #1a1a1a;">
+          
+          39.6%<span class="md-opp">vs KOR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.739"
+            title="Game win: 62.5%"
+            style="background: rgb(113,200,64); color: #1a1a1a;">
+          
+          73.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4621"
+            title="Game win: 45.4%"
+            style="background: rgb(183,207,50); color: #1a1a1a;">
+          
+          46.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2096"
+            title="Game win: 47.8%"
+            style="background: rgb(203,127,55); color: #1a1a1a;">
+          
+          21.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1001"
+            title="Game win: 39.3%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0393"
+            title="Game win: 49.9%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          3.9%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0196"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.0%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs ESP (48.2%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Korea Republic"
+          data-code="KOR"
+          data-group="E"
+          data-pot="3"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="20.392"
+          data-champ="0.0049">
+        <td><strong>Korea Republic</strong></td>
+        <td class="col-code">KOR</td>
+        <td class="col-group"><span class="group-chip group-E">E</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.292"
+            style="background: rgb(196,153,54); color: #1a1a1a;">
+          
+          29.2%<span class="md-opp">vs UZB</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.259"
+            style="background: rgb(199,142,54); color: #1a1a1a;">
+          
+          25.9%<span class="md-opp">vs ESP</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.392"
+            style="background: rgb(188,185,52); color: #1a1a1a;">
+          
+          39.2%<span class="md-opp">vs MAR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5539"
+            title="Game win: 46.5%"
+            style="background: rgb(164,215,53); color: #1a1a1a;">
+          
+          55.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2576"
+            title="Game win: 37.5%"
+            style="background: rgb(199,142,54); color: #1a1a1a;">
+          
+          25.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0965"
+            title="Game win: 31.2%"
+            style="background: rgb(212,90,58); color: #ffffff;">
+          
+          9.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0301"
+            title="Game win: 32.9%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0099"
+            title="Game win: 49.5%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0049"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs MAR (39.2%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Uzbekistan"
+          data-code="UZB"
+          data-group="E"
+          data-pot="4"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="10.249"
+          data-champ="0.001">
+        <td><strong>Uzbekistan</strong></td>
+        <td class="col-code">UZB</td>
+        <td class="col-group"><span class="group-chip group-E">E</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.236"
+            style="background: rgb(201,135,55); color: #1a1a1a;">
+          
+          23.6%<span class="md-opp">vs KOR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.249"
+            style="background: rgb(200,139,55); color: #1a1a1a;">
+          
+          24.9%<span class="md-opp">vs MAR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.151"
+            style="background: rgb(207,108,56); color: #1a1a1a;">
+          
+          15.1%<span class="md-opp">vs ESP</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.297"
+            title="Game win: 32.7%"
+            style="background: rgb(196,155,54); color: #1a1a1a;">
+          
+          29.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.097"
+            title="Game win: 32.3%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0313"
+            title="Game win: 30.4%"
+            style="background: rgb(217,70,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0095"
+            title="Game win: 21.1%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          0.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.002"
+            title="Game win: 50.0%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs MAR (24.9%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="France"
+          data-code="FRA"
+          data-group="F"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="30.773259527357887"
+          data-champ="0.0701">
+        <td><strong>France</strong></td>
+        <td class="col-code">FRA</td>
+        <td class="col-group"><span class="group-chip group-F">F</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.542"
+            style="background: rgb(168,216,52); color: #1a1a1a;">
+          
+          54.2%<span class="md-opp">vs SEN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.591"
+            style="background: rgb(154,212,55); color: #1a1a1a;">
+          
+          59.1%<span class="md-opp">vs SWE</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.5"
+            style="background: rgb(180,220,50); color: #1a1a1a;">
+          
+          50.0%<span class="md-opp">vs KSA</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9394"
+            title="Game win: 77.3%"
+            style="background: rgb(56,184,76); color: #ffffff;">
+          
+          93.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.7264"
+            title="Game win: 59.7%"
+            style="background: rgb(116,201,63); color: #1a1a1a;">
+          
+          72.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4333"
+            title="Game win: 57.9%"
+            style="background: rgb(185,198,51); color: #1a1a1a;">
+          
+          43.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2507"
+            title="Game win: 53.3%"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1337"
+            title="Game win: 52.4%"
+            style="background: rgb(209,102,57); color: #ffffff;">
+          
+          13.4%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0701"
+            style="background: rgb(214,82,58); color: #ffffff;">
+          
+          7.0%
+          
+        </td>
+
+        <td class="col-best">R32 (77.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Senegal"
+          data-code="SEN"
+          data-group="F"
+          data-pot="2"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="0.493"
+          data-champ="0.0197">
+        <td><strong>Senegal</strong></td>
+        <td class="col-code">SEN</td>
+        <td class="col-group"><span class="group-chip group-F">F</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.493"
+            style="background: rgb(180,217,50); color: #1a1a1a;">
+          
+          49.3%<span class="md-opp">vs FRA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.366"
+            style="background: rgb(190,177,52); color: #1a1a1a;">
+          
+          36.6%<span class="md-opp">vs KSA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.475"
+            style="background: rgb(182,212,50); color: #1a1a1a;">
+          
+          47.5%<span class="md-opp">vs SWE</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7417"
+            title="Game win: 60.2%"
+            style="background: rgb(112,200,64); color: #1a1a1a;">
+          
+          74.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4466"
+            title="Game win: 48.8%"
+            style="background: rgb(184,202,51); color: #1a1a1a;">
+          
+          44.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2181"
+            title="Game win: 43.9%"
+            style="background: rgb(202,129,55); color: #1a1a1a;">
+          
+          21.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0958"
+            title="Game win: 40.9%"
+            style="background: rgb(212,90,58); color: #ffffff;">
+          
+          9.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0392"
+            title="Game win: 50.3%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          3.9%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0197"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.0%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs FRA (49.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Sweden"
+          data-code="SWE"
+          data-group="F"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.365"
+          data-champ="0.0051">
+        <td><strong>Sweden</strong></td>
+        <td class="col-code">SWE</td>
+        <td class="col-group"><span class="group-chip group-F">F</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.282"
+            style="background: rgb(197,150,54); color: #1a1a1a;">
+          
+          28.2%<span class="md-opp">vs KSA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.32"
+            style="background: rgb(194,162,53); color: #1a1a1a;">
+          
+          32.0%<span class="md-opp">vs FRA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.365"
+            style="background: rgb(190,176,52); color: #1a1a1a;">
+          
+          36.5%<span class="md-opp">vs SEN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5454"
+            title="Game win: 45.7%"
+            style="background: rgb(167,216,52); color: #1a1a1a;">
+          
+          54.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2492"
+            title="Game win: 39.4%"
+            style="background: rgb(200,139,55); color: #1a1a1a;">
+          
+          24.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0983"
+            title="Game win: 30.4%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0299"
+            title="Game win: 32.1%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0096"
+            title="Game win: 53.1%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0051"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs SEN (36.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Saudi Arabia"
+          data-code="KSA"
+          data-group="F"
+          data-pot="4"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="20.276"
+          data-champ="0.001">
+        <td><strong>Saudi Arabia</strong></td>
+        <td class="col-code">KSA</td>
+        <td class="col-group"><span class="group-chip group-F">F</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.267"
+            style="background: rgb(198,145,54); color: #1a1a1a;">
+          
+          26.7%<span class="md-opp">vs SWE</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.271"
+            style="background: rgb(198,146,54); color: #1a1a1a;">
+          
+          27.1%<span class="md-opp">vs SEN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.276"
+            style="background: rgb(197,148,54); color: #1a1a1a;">
+          
+          27.6%<span class="md-opp">vs FRA</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2919"
+            title="Game win: 35.8%"
+            style="background: rgb(196,153,54); color: #1a1a1a;">
+          
+          29.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1045"
+            title="Game win: 29.8%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0311"
+            title="Game win: 32.5%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0101"
+            title="Game win: 19.8%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.002"
+            title="Game win: 50.0%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs FRA (27.6%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="England"
+          data-code="ENG"
+          data-group="G"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="40.6698224852071"
+          data-champ="0.0673">
+        <td><strong>England</strong></td>
+        <td class="col-code">ENG</td>
+        <td class="col-group"><span class="group-chip group-G">G</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.606"
+            style="background: rgb(150,211,56); color: #1a1a1a;">
+          
+          60.6%<span class="md-opp">vs IRN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.577"
+            style="background: rgb(158,213,54); color: #1a1a1a;">
+          
+          57.7%<span class="md-opp">vs ALG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.624"
+            style="background: rgb(145,210,57); color: #1a1a1a;">
+          
+          62.4%<span class="md-opp">vs SCO</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9064"
+            title="Game win: 74.6%"
+            style="background: rgb(66,187,74); color: #ffffff;">
+          
+          90.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.676"
+            title="Game win: 67.0%"
+            style="background: rgb(130,205,60); color: #1a1a1a;">
+          
+          67.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4528"
+            title="Game win: 55.6%"
+            style="background: rgb(183,204,50); color: #1a1a1a;">
+          
+          45.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2518"
+            title="Game win: 51.8%"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1305"
+            title="Game win: 51.6%"
+            style="background: rgb(209,101,57); color: #ffffff;">
+          
+          13.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0673"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.7%
+          
+        </td>
+
+        <td class="col-best">R16 (67.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Iran"
+          data-code="IRN"
+          data-group="G"
+          data-pot="2"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="0.455"
+          data-champ="0.0195">
+        <td><strong>Iran</strong></td>
+        <td class="col-code">IRN</td>
+        <td class="col-group"><span class="group-chip group-G">G</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.455"
+            style="background: rgb(183,205,50); color: #1a1a1a;">
+          
+          45.5%<span class="md-opp">vs ENG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.429"
+            style="background: rgb(185,197,51); color: #1a1a1a;">
+          
+          42.9%<span class="md-opp">vs SCO</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.431"
+            style="background: rgb(185,197,51); color: #1a1a1a;">
+          
+          43.1%<span class="md-opp">vs ALG</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7286"
+            title="Game win: 60.5%"
+            style="background: rgb(115,201,63); color: #1a1a1a;">
+          
+          72.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4408"
+            title="Game win: 48.8%"
+            style="background: rgb(184,201,51); color: #1a1a1a;">
+          
+          44.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2149"
+            title="Game win: 46.8%"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1006"
+            title="Game win: 38.2%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0384"
+            title="Game win: 50.8%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          3.8%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0195"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          1.9%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs ENG (45.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Algeria"
+          data-code="ALG"
+          data-group="G"
+          data-pot="3"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="0.393"
+          data-champ="0.0049">
+        <td><strong>Algeria</strong></td>
+        <td class="col-code">ALG</td>
+        <td class="col-group"><span class="group-chip group-G">G</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.393"
+            style="background: rgb(188,185,52); color: #1a1a1a;">
+          
+          39.3%<span class="md-opp">vs SCO</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.267"
+            style="background: rgb(198,145,54); color: #1a1a1a;">
+          
+          26.7%<span class="md-opp">vs ENG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.35"
+            style="background: rgb(192,172,53); color: #1a1a1a;">
+          
+          35.0%<span class="md-opp">vs IRN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5643"
+            title="Game win: 45.3%"
+            style="background: rgb(161,214,53); color: #1a1a1a;">
+          
+          56.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2556"
+            title="Game win: 37.9%"
+            style="background: rgb(199,141,54); color: #1a1a1a;">
+          
+          25.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0969"
+            title="Game win: 31.4%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0304"
+            title="Game win: 32.9%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.01"
+            title="Game win: 49.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0049"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs SCO (39.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Scotland"
+          data-code="SCO"
+          data-group="G"
+          data-pot="4"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="0.274"
+          data-champ="0.001">
+        <td><strong>Scotland</strong></td>
+        <td class="col-code">SCO</td>
+        <td class="col-group"><span class="group-chip group-G">G</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.274"
+            style="background: rgb(198,147,54); color: #1a1a1a;">
+          
+          27.4%<span class="md-opp">vs ALG</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.187"
+            style="background: rgb(205,119,56); color: #1a1a1a;">
+          
+          18.7%<span class="md-opp">vs IRN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.19"
+            style="background: rgb(204,120,56); color: #1a1a1a;">
+          
+          19.0%<span class="md-opp">vs ENG</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2928"
+            title="Game win: 32.7%"
+            style="background: rgb(196,153,54); color: #1a1a1a;">
+          
+          29.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0956"
+            title="Game win: 31.1%"
+            style="background: rgb(212,90,58); color: #ffffff;">
+          
+          9.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0297"
+            title="Game win: 35.0%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0104"
+            title="Game win: 20.2%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0021"
+            title="Game win: 47.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD1 vs ALG (27.4%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Brazil"
+          data-code="BRA"
+          data-group="H"
+          data-pot="1"
+          data-conf="CONMEBOL"
+          data-eliminated="false"
+          data-best-sort="30.805376708460408"
+          data-champ="0.072">
+        <td><strong>Brazil</strong></td>
+        <td class="col-code">BRA</td>
+        <td class="col-group"><span class="group-chip group-H">H</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">CONMEBOL</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.472"
+            style="background: rgb(182,211,50); color: #1a1a1a;">
+          
+          47.2%<span class="md-opp">vs COL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.485"
+            style="background: rgb(181,215,50); color: #1a1a1a;">
+          
+          48.5%<span class="md-opp">vs SRB</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.474"
+            style="background: rgb(182,211,50); color: #1a1a1a;">
+          
+          47.4%<span class="md-opp">vs CUW</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.8853"
+            title="Game win: 80.5%"
+            style="background: rgb(72,189,73); color: #1a1a1a;">
+          
+          88.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.713"
+            title="Game win: 63.6%"
+            style="background: rgb(120,202,62); color: #1a1a1a;">
+          
+          71.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4534"
+            title="Game win: 57.5%"
+            style="background: rgb(183,205,50); color: #1a1a1a;">
+          
+          45.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2609"
+            title="Game win: 49.1%"
+            style="background: rgb(199,143,54); color: #1a1a1a;">
+          
+          26.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1281"
+            title="Game win: 56.2%"
+            style="background: rgb(209,100,57); color: #ffffff;">
+          
+          12.8%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.072"
+            style="background: rgb(214,83,58); color: #ffffff;">
+          
+          7.2%
+          
+        </td>
+
+        <td class="col-best">R32 (80.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Colombia"
+          data-code="COL"
+          data-group="H"
+          data-pot="2"
+          data-conf="CONMEBOL"
+          data-eliminated="false"
+          data-best-sort="10.445"
+          data-champ="0.0208">
+        <td><strong>Colombia</strong></td>
+        <td class="col-code">COL</td>
+        <td class="col-group"><span class="group-chip group-H">H</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">CONMEBOL</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.437"
+            style="background: rgb(185,199,51); color: #1a1a1a;">
+          
+          43.7%<span class="md-opp">vs BRA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.445"
+            style="background: rgb(184,202,51); color: #1a1a1a;">
+          
+          44.5%<span class="md-opp">vs CUW</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.438"
+            style="background: rgb(184,200,51); color: #1a1a1a;">
+          
+          43.8%<span class="md-opp">vs SRB</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7819"
+            title="Game win: 56.5%"
+            style="background: rgb(101,197,66); color: #1a1a1a;">
+          
+          78.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4417"
+            title="Game win: 48.4%"
+            style="background: rgb(184,201,51); color: #1a1a1a;">
+          
+          44.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2137"
+            title="Game win: 46.6%"
+            style="background: rgb(202,128,55); color: #1a1a1a;">
+          
+          21.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0996"
+            title="Game win: 42.1%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0419"
+            title="Game win: 49.6%"
+            style="background: rgb(216,73,59); color: #ffffff;">
+          
+          4.2%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0208"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs CUW (44.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Serbia"
+          data-code="SRB"
+          data-group="H"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.378"
+          data-champ="0.005">
+        <td><strong>Serbia</strong></td>
+        <td class="col-code">SRB</td>
+        <td class="col-group"><span class="group-chip group-H">H</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.35"
+            style="background: rgb(192,172,53); color: #1a1a1a;">
+          
+          35.0%<span class="md-opp">vs CUW</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.378"
+            style="background: rgb(189,180,52); color: #1a1a1a;">
+          
+          37.8%<span class="md-opp">vs BRA</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.349"
+            style="background: rgb(192,171,53); color: #1a1a1a;">
+          
+          34.9%<span class="md-opp">vs COL</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5733"
+            title="Game win: 43.1%"
+            style="background: rgb(159,214,54); color: #1a1a1a;">
+          
+          57.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2472"
+            title="Game win: 42.3%"
+            style="background: rgb(200,139,55); color: #1a1a1a;">
+          
+          24.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1045"
+            title="Game win: 28.3%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0296"
+            title="Game win: 34.5%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0102"
+            title="Game win: 49.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.005"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs BRA (37.8%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Curacao"
+          data-code="CUW"
+          data-group="H"
+          data-pot="4"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="10.251"
+          data-champ="0.001">
+        <td><strong>Curacao</strong></td>
+        <td class="col-code">CUW</td>
+        <td class="col-group"><span class="group-chip group-H">H</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.144"
+            style="background: rgb(208,106,57); color: #ffffff;">
+          
+          14.4%<span class="md-opp">vs SRB</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.251"
+            style="background: rgb(199,140,54); color: #1a1a1a;">
+          
+          25.1%<span class="md-opp">vs COL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.186"
+            style="background: rgb(205,119,56); color: #1a1a1a;">
+          
+          18.6%<span class="md-opp">vs BRA</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.3137"
+            title="Game win: 32.8%"
+            style="background: rgb(194,160,53); color: #1a1a1a;">
+          
+          31.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.103"
+            title="Game win: 28.1%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0289"
+            title="Game win: 35.6%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          2.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0103"
+            title="Game win: 19.4%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.002"
+            title="Game win: 50.0%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs COL (25.1%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Portugal"
+          data-code="POR"
+          data-group="I"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="40.67677218011592"
+          data-champ="0.069">
+        <td><strong>Portugal</strong></td>
+        <td class="col-code">POR</td>
+        <td class="col-group"><span class="group-chip group-I">I</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.557"
+            style="background: rgb(164,215,53); color: #1a1a1a;">
+          
+          55.7%<span class="md-opp">vs URU</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.525"
+            style="background: rgb(173,218,51); color: #1a1a1a;">
+          
+          52.5%<span class="md-opp">vs CIV</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.56"
+            style="background: rgb(163,215,53); color: #1a1a1a;">
+          
+          56.0%<span class="md-opp">vs HUN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9404"
+            title="Game win: 71.6%"
+            style="background: rgb(56,184,76); color: #ffffff;">
+          
+          94.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.6729"
+            title="Game win: 67.7%"
+            style="background: rgb(131,206,60); color: #1a1a1a;">
+          
+          67.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4554"
+            title="Game win: 52.8%"
+            style="background: rgb(183,205,50); color: #1a1a1a;">
+          
+          45.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2405"
+            title="Game win: 52.0%"
+            style="background: rgb(200,136,55); color: #1a1a1a;">
+          
+          24.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1251"
+            title="Game win: 55.2%"
+            style="background: rgb(209,100,57); color: #ffffff;">
+          
+          12.5%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.069"
+            style="background: rgb(214,82,58); color: #ffffff;">
+          
+          6.9%
+          
+        </td>
+
+        <td class="col-best">R16 (67.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Uruguay"
+          data-code="URU"
+          data-group="I"
+          data-pot="2"
+          data-conf="CONMEBOL"
+          data-eliminated="false"
+          data-best-sort="10.445"
+          data-champ="0.0194">
+        <td><strong>Uruguay</strong></td>
+        <td class="col-code">URU</td>
+        <td class="col-group"><span class="group-chip group-I">I</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">CONMEBOL</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.444"
+            style="background: rgb(184,202,51); color: #1a1a1a;">
+          
+          44.4%<span class="md-opp">vs POR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.445"
+            style="background: rgb(184,202,51); color: #1a1a1a;">
+          
+          44.5%<span class="md-opp">vs HUN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.345"
+            style="background: rgb(192,170,53); color: #1a1a1a;">
+          
+          34.5%<span class="md-opp">vs CIV</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7559"
+            title="Game win: 58.7%"
+            style="background: rgb(108,199,65); color: #1a1a1a;">
+          
+          75.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4435"
+            title="Game win: 49.0%"
+            style="background: rgb(184,201,51); color: #1a1a1a;">
+          
+          44.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2175"
+            title="Game win: 44.8%"
+            style="background: rgb(202,129,55); color: #1a1a1a;">
+          
+          21.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0974"
+            title="Game win: 40.8%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0397"
+            title="Game win: 48.9%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          4.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0194"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          1.9%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs HUN (44.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Ivory Coast"
+          data-code="CIV"
+          data-group="I"
+          data-pot="3"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="20.346"
+          data-champ="0.0048">
+        <td><strong>Ivory Coast</strong></td>
+        <td class="col-code">CIV</td>
+        <td class="col-group"><span class="group-chip group-I">I</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.26"
+            style="background: rgb(199,143,54); color: #1a1a1a;">
+          
+          26.0%<span class="md-opp">vs HUN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.327"
+            style="background: rgb(193,164,53); color: #1a1a1a;">
+          
+          32.7%<span class="md-opp">vs POR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.346"
+            style="background: rgb(192,170,53); color: #1a1a1a;">
+          
+          34.6%<span class="md-opp">vs URU</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5739"
+            title="Game win: 44.4%"
+            style="background: rgb(159,214,54); color: #1a1a1a;">
+          
+          57.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2546"
+            title="Game win: 38.9%"
+            style="background: rgb(199,141,54); color: #1a1a1a;">
+          
+          25.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.099"
+            title="Game win: 29.6%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0293"
+            title="Game win: 32.8%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          2.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0096"
+            title="Game win: 50.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0048"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs URU (34.6%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Hungary"
+          data-code="HUN"
+          data-group="I"
+          data-pot="4"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.217"
+          data-champ="0.001">
+        <td><strong>Hungary</strong></td>
+        <td class="col-code">HUN</td>
+        <td class="col-group"><span class="group-chip group-I">I</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.184"
+            style="background: rgb(205,118,56); color: #1a1a1a;">
+          
+          18.4%<span class="md-opp">vs CIV</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.217"
+            style="background: rgb(202,129,55); color: #1a1a1a;">
+          
+          21.7%<span class="md-opp">vs URU</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.182"
+            style="background: rgb(205,118,56); color: #1a1a1a;">
+          
+          18.2%<span class="md-opp">vs POR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2944"
+            title="Game win: 35.5%"
+            style="background: rgb(196,154,54); color: #1a1a1a;">
+          
+          29.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1044"
+            title="Game win: 29.0%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0303"
+            title="Game win: 34.0%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0103"
+            title="Game win: 19.4%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.002"
+            title="Game win: 50.0%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs URU (21.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Netherlands"
+          data-code="NED"
+          data-group="J"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="30.770006436387042"
+          data-champ="0.0733">
+        <td><strong>Netherlands</strong></td>
+        <td class="col-code">NED</td>
+        <td class="col-group"><span class="group-chip group-J">J</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.624"
+            style="background: rgb(145,210,57); color: #1a1a1a;">
+          
+          62.4%<span class="md-opp">vs AUS</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.552"
+            style="background: rgb(165,215,53); color: #1a1a1a;">
+          
+          55.2%<span class="md-opp">vs POL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.512"
+            style="background: rgb(176,219,50); color: #1a1a1a;">
+          
+          51.2%<span class="md-opp">vs PAN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9322"
+            title="Game win: 77.0%"
+            style="background: rgb(58,185,75); color: #ffffff;">
+          
+          93.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.7178"
+            title="Game win: 61.5%"
+            style="background: rgb(119,202,63); color: #1a1a1a;">
+          
+          71.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4418"
+            title="Game win: 57.5%"
+            style="background: rgb(184,201,51); color: #1a1a1a;">
+          
+          44.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2539"
+            title="Game win: 48.7%"
+            style="background: rgb(199,141,54); color: #1a1a1a;">
+          
+          25.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1236"
+            title="Game win: 59.3%"
+            style="background: rgb(210,99,57); color: #ffffff;">
+          
+          12.4%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0733"
+            style="background: rgb(214,83,58); color: #ffffff;">
+          
+          7.3%
+          
+        </td>
+
+        <td class="col-best">R32 (77.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Australia"
+          data-code="AUS"
+          data-group="J"
+          data-pot="2"
+          data-conf="AFC"
+          data-eliminated="false"
+          data-best-sort="10.495"
+          data-champ="0.0209">
+        <td><strong>Australia</strong></td>
+        <td class="col-code">AUS</td>
+        <td class="col-group"><span class="group-chip group-J">J</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">AFC</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.415"
+            style="background: rgb(186,192,51); color: #1a1a1a;">
+          
+          41.5%<span class="md-opp">vs NED</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.495"
+            style="background: rgb(180,218,50); color: #1a1a1a;">
+          
+          49.5%<span class="md-opp">vs PAN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.449"
+            style="background: rgb(184,203,51); color: #1a1a1a;">
+          
+          44.9%<span class="md-opp">vs POL</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7772"
+            title="Game win: 60.4%"
+            style="background: rgb(102,197,66); color: #1a1a1a;">
+          
+          77.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4692"
+            title="Game win: 48.8%"
+            style="background: rgb(182,210,50); color: #1a1a1a;">
+          
+          46.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2289"
+            title="Game win: 43.3%"
+            style="background: rgb(201,133,55); color: #1a1a1a;">
+          
+          22.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.099"
+            title="Game win: 42.3%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0419"
+            title="Game win: 49.9%"
+            style="background: rgb(216,73,59); color: #ffffff;">
+          
+          4.2%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0209"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs PAN (49.5%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Poland"
+          data-code="POL"
+          data-group="J"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.373"
+          data-champ="0.0051">
+        <td><strong>Poland</strong></td>
+        <td class="col-code">POL</td>
+        <td class="col-group"><span class="group-chip group-J">J</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.277"
+            style="background: rgb(197,148,54); color: #1a1a1a;">
+          
+          27.7%<span class="md-opp">vs PAN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.373"
+            style="background: rgb(190,179,52); color: #1a1a1a;">
+          
+          37.3%<span class="md-opp">vs NED</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.295"
+            style="background: rgb(196,154,54); color: #1a1a1a;">
+          
+          29.5%<span class="md-opp">vs AUS</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5336"
+            title="Game win: 46.2%"
+            style="background: rgb(170,217,52); color: #1a1a1a;">
+          
+          53.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2465"
+            title="Game win: 41.1%"
+            style="background: rgb(200,138,55); color: #1a1a1a;">
+          
+          24.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1014"
+            title="Game win: 29.7%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0301"
+            title="Game win: 33.2%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.01"
+            title="Game win: 51.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0051"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs NED (37.3%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Panama"
+          data-code="PAN"
+          data-group="J"
+          data-pot="4"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="20.24"
+          data-champ="0.001">
+        <td><strong>Panama</strong></td>
+        <td class="col-code">PAN</td>
+        <td class="col-group"><span class="group-chip group-J">J</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.233"
+            style="background: rgb(201,134,55); color: #1a1a1a;">
+          
+          23.3%<span class="md-opp">vs POL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.17"
+            style="background: rgb(206,114,56); color: #1a1a1a;">
+          
+          17.0%<span class="md-opp">vs AUS</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.24"
+            style="background: rgb(200,136,55); color: #1a1a1a;">
+          
+          24.0%<span class="md-opp">vs NED</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2896"
+            title="Game win: 35.9%"
+            style="background: rgb(196,152,54); color: #1a1a1a;">
+          
+          29.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1039"
+            title="Game win: 30.2%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0314"
+            title="Game win: 32.8%"
+            style="background: rgb(217,70,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0103"
+            title="Game win: 20.4%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0021"
+            title="Game win: 47.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs NED (24.0%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Belgium"
+          data-code="BEL"
+          data-group="K"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="30.788506000220192"
+          data-champ="0.0666">
+        <td><strong>Belgium</strong></td>
+        <td class="col-code">BEL</td>
+        <td class="col-group"><span class="group-chip group-K">K</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.597"
+            style="background: rgb(152,212,55); color: #1a1a1a;">
+          
+          59.7%<span class="md-opp">vs DEN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.572"
+            style="background: rgb(159,214,54); color: #1a1a1a;">
+          
+          57.2%<span class="md-opp">vs UKR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.483"
+            style="background: rgb(181,214,50); color: #1a1a1a;">
+          
+          48.3%<span class="md-opp">vs HAI</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.9083"
+            title="Game win: 78.9%"
+            style="background: rgb(65,187,74); color: #ffffff;">
+          
+          90.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.7162"
+            title="Game win: 60.6%"
+            style="background: rgb(119,202,62); color: #1a1a1a;">
+          
+          71.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4337"
+            title="Game win: 59.0%"
+            style="background: rgb(185,198,51); color: #1a1a1a;">
+          
+          43.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.256"
+            title="Game win: 53.3%"
+            style="background: rgb(199,141,54); color: #1a1a1a;">
+          
+          25.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1365"
+            title="Game win: 48.8%"
+            style="background: rgb(209,103,57); color: #ffffff;">
+          
+          13.7%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0666"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.7%
+          
+        </td>
+
+        <td class="col-best">R32 (78.9%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Denmark"
+          data-code="DEN"
+          data-group="K"
+          data-pot="2"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.475999999999999"
+          data-champ="0.0203">
+        <td><strong>Denmark</strong></td>
+        <td class="col-code">DEN</td>
+        <td class="col-group"><span class="group-chip group-K">K</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.375"
+            style="background: rgb(190,180,52); color: #1a1a1a;">
+          
+          37.5%<span class="md-opp">vs BEL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.476"
+            style="background: rgb(181,212,50); color: #1a1a1a;">
+          
+          47.6%<span class="md-opp">vs HAI</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.433"
+            style="background: rgb(185,198,51); color: #1a1a1a;">
+          
+          43.3%<span class="md-opp">vs UKR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7554"
+            title="Game win: 62.3%"
+            style="background: rgb(108,199,65); color: #1a1a1a;">
+          
+          75.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4705"
+            title="Game win: 46.2%"
+            style="background: rgb(182,210,50); color: #1a1a1a;">
+          
+          47.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2174"
+            title="Game win: 48.1%"
+            style="background: rgb(202,129,55); color: #1a1a1a;">
+          
+          21.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1046"
+            title="Game win: 38.3%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0401"
+            title="Game win: 50.6%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          4.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0203"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.0%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs HAI (47.6%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Ukraine"
+          data-code="UKR"
+          data-group="K"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="10.321"
+          data-champ="0.0051">
+        <td><strong>Ukraine</strong></td>
+        <td class="col-code">UKR</td>
+        <td class="col-group"><span class="group-chip group-K">K</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.265"
+            style="background: rgb(198,144,54); color: #1a1a1a;">
+          
+          26.5%<span class="md-opp">vs HAI</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.321"
+            style="background: rgb(194,162,53); color: #1a1a1a;">
+          
+          32.1%<span class="md-opp">vs BEL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.254"
+            style="background: rgb(199,141,54); color: #1a1a1a;">
+          
+          25.4%<span class="md-opp">vs DEN</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5628"
+            title="Game win: 43.7%"
+            style="background: rgb(162,214,53); color: #1a1a1a;">
+          
+          56.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2458"
+            title="Game win: 39.7%"
+            style="background: rgb(200,138,55); color: #1a1a1a;">
+          
+          24.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0976"
+            title="Game win: 29.3%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          9.8%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0286"
+            title="Game win: 35.3%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          2.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0101"
+            title="Game win: 50.5%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0051"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs BEL (32.1%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Haiti"
+          data-code="HAI"
+          data-group="K"
+          data-pot="4"
+          data-conf="CONCACAF"
+          data-eliminated="false"
+          data-best-sort="20.227"
+          data-champ="0.001">
+        <td><strong>Haiti</strong></td>
+        <td class="col-code">HAI</td>
+        <td class="col-group"><span class="group-chip group-K">K</span></td>
+        <td class="col-pot">4</td>
+        <td><span class="conf-chip">CONCACAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.166"
+            style="background: rgb(206,113,56); color: #1a1a1a;">
+          
+          16.6%<span class="md-opp">vs UKR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.187"
+            style="background: rgb(205,119,56); color: #1a1a1a;">
+          
+          18.7%<span class="md-opp">vs DEN</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.227"
+            style="background: rgb(201,132,55); color: #1a1a1a;">
+          
+          22.7%<span class="md-opp">vs BEL</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.2957"
+            title="Game win: 35.4%"
+            style="background: rgb(196,154,54); color: #1a1a1a;">
+          
+          29.6%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1047"
+            title="Game win: 27.8%"
+            style="background: rgb(211,93,57); color: #ffffff;">
+          
+          10.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0291"
+            title="Game win: 35.1%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          2.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0102"
+            title="Game win: 18.6%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0019"
+            title="Game win: 52.6%"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.001"
+            style="background: rgb(219,60,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs BEL (22.7%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Germany"
+          data-code="GER"
+          data-group="L"
+          data-pot="1"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="30.766457680250785"
+          data-champ="0.0678">
+        <td><strong>Germany</strong></td>
+        <td class="col-code">GER</td>
+        <td class="col-group"><span class="group-chip group-L">L</span></td>
+        <td class="col-pot">1</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.547"
+            style="background: rgb(166,216,52); color: #1a1a1a;">
+          
+          54.7%<span class="md-opp">vs AUT</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.538"
+            style="background: rgb(169,216,52); color: #1a1a1a;">
+          
+          53.8%<span class="md-opp">vs WAL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.6"
+            style="background: rgb(152,212,56); color: #1a1a1a;">
+          
+          60.0%<span class="md-opp">vs NGR</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.957"
+            title="Game win: 76.6%"
+            style="background: rgb(52,183,77); color: #ffffff;">
+          
+          95.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.7335"
+            title="Game win: 64.4%"
+            style="background: rgb(114,201,64); color: #1a1a1a;">
+          
+          73.4%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4724"
+            title="Game win: 51.2%"
+            style="background: rgb(182,211,50); color: #1a1a1a;">
+          
+          47.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2418"
+            title="Game win: 53.8%"
+            style="background: rgb(200,137,55); color: #1a1a1a;">
+          
+          24.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1302"
+            title="Game win: 52.1%"
+            style="background: rgb(209,101,57); color: #ffffff;">
+          
+          13.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0678"
+            style="background: rgb(214,81,58); color: #ffffff;">
+          
+          6.8%
+          
+        </td>
+
+        <td class="col-best">R32 (76.6%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Austria"
+          data-code="AUT"
+          data-group="L"
+          data-pot="2"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.482"
+          data-champ="0.0197">
+        <td><strong>Austria</strong></td>
+        <td class="col-code">AUT</td>
+        <td class="col-group"><span class="group-chip group-L">L</span></td>
+        <td class="col-pot">2</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.426"
+            style="background: rgb(185,196,51); color: #1a1a1a;">
+          
+          42.6%<span class="md-opp">vs GER</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.366"
+            style="background: rgb(190,177,52); color: #1a1a1a;">
+          
+          36.6%<span class="md-opp">vs NGR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.482"
+            style="background: rgb(181,214,50); color: #1a1a1a;">
+          
+          48.2%<span class="md-opp">vs WAL</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.7511"
+            title="Game win: 62.2%"
+            style="background: rgb(109,199,65); color: #1a1a1a;">
+          
+          75.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.4672"
+            title="Game win: 47.8%"
+            style="background: rgb(182,209,50); color: #1a1a1a;">
+          
+          46.7%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2232"
+            title="Game win: 42.6%"
+            style="background: rgb(202,131,55); color: #1a1a1a;">
+          
+          22.3%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.095"
+            title="Game win: 41.6%"
+            style="background: rgb(212,90,58); color: #ffffff;">
+          
+          9.5%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0395"
+            title="Game win: 49.9%"
+            style="background: rgb(216,72,59); color: #ffffff;">
+          
+          4.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0197"
+            style="background: rgb(218,66,59); color: #ffffff;">
+          
+          2.0%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs WAL (48.2%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Wales"
+          data-code="WAL"
+          data-group="L"
+          data-pot="3"
+          data-conf="UEFA"
+          data-eliminated="false"
+          data-best-sort="20.338"
+          data-champ="0.0049">
+        <td><strong>Wales</strong></td>
+        <td class="col-code">WAL</td>
+        <td class="col-group"><span class="group-chip group-L">L</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">UEFA</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.275"
+            style="background: rgb(198,148,54); color: #1a1a1a;">
+          
+          27.5%<span class="md-opp">vs NGR</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.265"
+            style="background: rgb(198,144,54); color: #1a1a1a;">
+          
+          26.5%<span class="md-opp">vs GER</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.338"
+            style="background: rgb(192,168,53); color: #1a1a1a;">
+          
+          33.8%<span class="md-opp">vs AUT</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5295"
+            title="Game win: 49.5%"
+            style="background: rgb(171,217,51); color: #1a1a1a;">
+          
+          52.9%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2621"
+            title="Game win: 38.1%"
+            style="background: rgb(199,143,54); color: #1a1a1a;">
+          
+          26.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0998"
+            title="Game win: 31.2%"
+            style="background: rgb(212,91,58); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0311"
+            title="Game win: 32.8%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0102"
+            title="Game win: 48.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.0049"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          &lt;0.1%
+          
+        </td>
+
+        <td class="col-best best-risky">MD3 vs AUT (33.8%)</td>
+      </tr>
+      
+      <tr class=""
+          data-nation="Nigeria"
+          data-code="NGR"
+          data-group="L"
+          data-pot="3"
+          data-conf="CAF"
+          data-eliminated="false"
+          data-best-sort="10.344"
+          data-champ="0.005">
+        <td><strong>Nigeria</strong></td>
+        <td class="col-code">NGR</td>
+        <td class="col-group"><span class="group-chip group-L">L</span></td>
+        <td class="col-pot">3</td>
+        <td><span class="conf-chip">CAF</span></td>
+
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.339"
+            style="background: rgb(192,168,53); color: #1a1a1a;">
+          
+          33.9%<span class="md-opp">vs WAL</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.344"
+            style="background: rgb(192,170,53); color: #1a1a1a;">
+          
+          34.4%<span class="md-opp">vs AUT</span>
+          
+        </td>
+        
+        <td class="prob-cell md-cell"
+            data-prob="0.296"
+            style="background: rgb(196,154,54); color: #1a1a1a;">
+          
+          29.6%<span class="md-opp">vs GER</span>
+          
+        </td>
+        
+
+        
+        <td class="prob-cell"
+            data-prob="0.5725"
+            title="Game win: 42.0%"
+            style="background: rgb(159,214,54); color: #1a1a1a;">
+          
+          57.2%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.2405"
+            title="Game win: 41.7%"
+            style="background: rgb(200,136,55); color: #1a1a1a;">
+          
+          24.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.1002"
+            title="Game win: 30.9%"
+            style="background: rgb(211,92,57); color: #ffffff;">
+          
+          10.0%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.031"
+            title="Game win: 32.9%"
+            style="background: rgb(217,69,59); color: #ffffff;">
+          
+          3.1%
+          
+        </td>
+        
+        <td class="prob-cell"
+            data-prob="0.0102"
+            title="Game win: 49.0%"
+            style="background: rgb(219,63,59); color: #ffffff;">
+          
+          1.0%
+          
+        </td>
+        
+
+        <td class="prob-cell"
+            data-champ="0.005"
+            style="background: rgb(219,61,59); color: #ffffff;">
+          
+          0.5%
+          
+        </td>
+
+        <td class="col-best best-risky">MD2 vs AUT (34.4%)</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+// ── Sorting ────────────────────────────────────────────────────────
+let currentSort = { col: null, asc: true };
+
+function sortTable(col) {
+  const table = document.getElementById('odds-table');
+  if (!table) return;
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  if (currentSort.col === col) {
+    currentSort.asc = !currentSort.asc;
+  } else {
+    currentSort.col = col;
+    currentSort.asc = (col === 'nation' || col === 'code' || col === 'group' || col === 'confederation' || col === 'pot');
+  }
+
+  table.querySelectorAll('th').forEach(th => {
+    th.classList.remove('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = '▲';
+  });
+  const th = table.querySelector('th[data-col="' + col + '"]');
+  if (th) {
+    th.classList.add('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = currentSort.asc ? '▲' : '▼';
+  }
+
+  const visibleMd = ["MD1", "MD2", "MD3"];
+  const visibleKo = ["R32", "R16", "QF", "SF", "Final"];
+  const mdIdx = visibleMd.indexOf(col);
+  const koIdx = visibleKo.indexOf(col);
+
+  rows.sort(function(a, b) {
+    var va, vb;
+    if (col === 'nation') {
+      va = a.dataset.nation.toLowerCase();
+      vb = b.dataset.nation.toLowerCase();
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'code') {
+      va = a.dataset.code;
+      vb = b.dataset.code;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'group') {
+      va = a.dataset.group;
+      vb = b.dataset.group;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'confederation') {
+      va = a.dataset.conf;
+      vb = b.dataset.conf;
+      return currentSort.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    if (col === 'pot') {
+      va = parseInt(a.dataset.pot);
+      vb = parseInt(b.dataset.pot);
+    } else if (col === 'best') {
+      va = parseFloat(a.dataset.bestSort || '-1');
+      vb = parseFloat(b.dataset.bestSort || '-1');
+    } else if (col === 'champ') {
+      va = parseFloat(a.dataset.champ || '-1');
+      vb = parseFloat(b.dataset.champ || '-1');
+    } else if (mdIdx >= 0) {
+      // MD cells come first in .prob-cell ordering
+      var cellA = a.querySelectorAll('.prob-cell')[mdIdx];
+      var cellB = b.querySelectorAll('.prob-cell')[mdIdx];
+      va = cellA ? parseFloat(cellA.dataset.prob || '-1') : -1;
+      vb = cellB ? parseFloat(cellB.dataset.prob || '-1') : -1;
+    } else if (koIdx >= 0) {
+      // KO cells come after MD cells
+      var offset = visibleMd.length + koIdx;
+      var cellA = a.querySelectorAll('.prob-cell')[offset];
+      var cellB = b.querySelectorAll('.prob-cell')[offset];
+      va = cellA ? parseFloat(cellA.dataset.prob || '-1') : -1;
+      vb = cellB ? parseFloat(cellB.dataset.prob || '-1') : -1;
+    } else {
+      return 0;
+    }
+    if (va < vb) return currentSort.asc ? -1 : 1;
+    if (va > vb) return currentSort.asc ? 1 : -1;
+    return 0;
+  });
+  rows.forEach(function(r) { tbody.appendChild(r); });
+}
+
+// ── Filtering ──────────────────────────────────────────────────────
+function applyFilters() {
+  var group = document.getElementById('filter-group').value;
+  var pot = document.getElementById('filter-pot').value;
+  var conf = document.getElementById('filter-conf').value;
+  var search = document.getElementById('filter-search').value.toLowerCase();
+  var showEliminated = document.getElementById('filter-eliminated').checked;
+
+  var table = document.getElementById('odds-table');
+  if (!table) return;
+  table.querySelectorAll('tbody tr').forEach(function(row) {
+    var show = true;
+    if (group && row.dataset.group !== group) show = false;
+    if (pot && row.dataset.pot !== pot) show = false;
+    if (conf && row.dataset.conf !== conf) show = false;
+    if (search && !(row.dataset.nation + ' ' + row.dataset.code).toLowerCase().includes(search)) show = false;
+    if (!showEliminated && row.dataset.eliminated === 'true') show = false;
+    row.style.display = show ? '' : 'none';
+  });
+}
+applyFilters();
+
+// ── CSV export ─────────────────────────────────────────────────────
+function exportCsv() {
+  var table = document.getElementById('odds-table');
+  if (!table) return;
+  var headers = [];
+  table.querySelectorAll('thead th').forEach(function(th) {
+    var t = th.textContent.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/ [▲▼].*/, '').replace(/\si$/, '').trim();
+    headers.push('"' + t + '"');
+  });
+  var rows = [headers.join(',')];
+  table.querySelectorAll('tbody tr').forEach(function(tr) {
+    if (tr.style.display === 'none') return;
+    var cells = [];
+    tr.querySelectorAll('td').forEach(function(td) {
+      var text = td.textContent.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+      // Convert "53%" → "0.53"
+      text = text.replace(/(-?\d+(?:\.\d+)?)%/g, function(_, n) {
+        var d = parseFloat(n) / 100;
+        return isFinite(d) ? d.toFixed(4).replace(/\.?(0+)$/, '') : n + '%';
+      });
+      cells.push('"' + text.replace(/"/g, '""') + '"');
+    });
+    rows.push(cells.join(','));
+  });
+  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'world_cup_odds.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── Floating tooltip for info icons ────────────────────────────────
+(function() {
+  var tip = document.createElement('div');
+  tip.id = 'floating-tooltip';
+  document.body.appendChild(tip);
+  document.querySelectorAll('.info-tip[data-tip]').forEach(function(el) {
+    el.addEventListener('mouseenter', function(e) {
+      e.stopPropagation();
+      tip.textContent = el.getAttribute('data-tip');
+      tip.style.display = 'block';
+      var rect = el.getBoundingClientRect();
+      var tipRect = tip.getBoundingClientRect();
+      var left = rect.left + rect.width / 2 - tipRect.width / 2;
+      var top = rect.top - tipRect.height - 10;
+      if (top < 4) top = rect.bottom + 10;
+      if (left < 4) left = 4;
+      if (left + tipRect.width > window.innerWidth - 4) {
+        left = window.innerWidth - tipRect.width - 4;
+      }
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+    });
+    el.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    el.addEventListener('click', function(e) { e.stopPropagation(); });
+  });
+})();
+</script>
+
+</body>
+</html>

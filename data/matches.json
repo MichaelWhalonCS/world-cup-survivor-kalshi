@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "tournament": "2026 FIFA World Cup",
+    "verified": false,
+    "source_note": "PLACEHOLDER schedule template — group-stage dates per matchday per group follow the FIFA-published pattern (Jun 11–27, 2026), and knockout dates follow the FIFA-published pattern (Jun 29 – Jul 19, 2026). Verify against the official FIFA fixture list before publishing.",
+    "rounds": ["MD1", "MD2", "MD3", "R32", "R16", "QF", "SF", "Final"],
+    "round_labels": {
+      "MD1": "Matchday 1",
+      "MD2": "Matchday 2",
+      "MD3": "Matchday 3",
+      "R32": "Round of 32",
+      "R16": "Round of 16",
+      "QF":  "Quarter-finals",
+      "SF":  "Semi-finals",
+      "Final": "Final"
+    }
+  },
+  "group_stage": {
+    "_description": "Group-stage match dates per matchday per group. Each group plays 6 matches across 3 matchdays. Within a group: MD1 pairs slots (1v2, 3v4); MD2 pairs (1v3, 2v4); MD3 pairs (1v4, 2v3) — last matchday plays simultaneously.",
+    "schedule": {
+      "A": {"MD1": "2026-06-11", "MD2": "2026-06-16", "MD3": "2026-06-25"},
+      "B": {"MD1": "2026-06-12", "MD2": "2026-06-17", "MD3": "2026-06-25"},
+      "C": {"MD1": "2026-06-12", "MD2": "2026-06-17", "MD3": "2026-06-26"},
+      "D": {"MD1": "2026-06-13", "MD2": "2026-06-18", "MD3": "2026-06-26"},
+      "E": {"MD1": "2026-06-13", "MD2": "2026-06-18", "MD3": "2026-06-26"},
+      "F": {"MD1": "2026-06-14", "MD2": "2026-06-19", "MD3": "2026-06-26"},
+      "G": {"MD1": "2026-06-14", "MD2": "2026-06-19", "MD3": "2026-06-27"},
+      "H": {"MD1": "2026-06-15", "MD2": "2026-06-20", "MD3": "2026-06-27"},
+      "I": {"MD1": "2026-06-15", "MD2": "2026-06-20", "MD3": "2026-06-27"},
+      "J": {"MD1": "2026-06-15", "MD2": "2026-06-21", "MD3": "2026-06-27"},
+      "K": {"MD1": "2026-06-16", "MD2": "2026-06-21", "MD3": "2026-06-25"},
+      "L": {"MD1": "2026-06-16", "MD2": "2026-06-22", "MD3": "2026-06-26"}
+    }
+  },
+  "knockout": {
+    "_description": "Knockout-stage date windows. Exact match-by-match dates are populated from Kalshi market tickers once the per-match advancement is known.",
+    "R32": {"start": "2026-06-29", "end": "2026-07-03"},
+    "R16": {"start": "2026-07-04", "end": "2026-07-07"},
+    "QF":  {"start": "2026-07-09", "end": "2026-07-11"},
+    "SF":  {"start": "2026-07-14", "end": "2026-07-15"},
+    "3rd": {"date":  "2026-07-18"},
+    "Final": {"date": "2026-07-19", "venue": "MetLife Stadium, East Rutherford, NJ"}
+  }
+}
