@@ -57,26 +57,12 @@ SERIES_TICKER = "KXFIFAGAME"
 FUTURES_SERIES: str | None = None       # e.g. "KXFIFAWC26ROUND" once listed
 CHAMP_EVENT: str | None = None          # e.g. "KXFIFAWC-26" once listed
 
-# Map of Kalshi date strings (embedded in tickers) → matchday round code.
-# Group-stage dates pulled from data/matches.json — keep this in sync if the
-# schedule there changes.
-_DATE_TO_ROUND: dict[str, str] = {
-    # MD1 — Jun 11–16
-    "JUN11": "MD1", "JUN12": "MD1", "JUN13": "MD1",
-    "JUN14": "MD1", "JUN15": "MD1", "JUN16": "MD1",
-    # MD2 — Jun 16–22
-    "JUN17": "MD2", "JUN18": "MD2", "JUN19": "MD2",
-    "JUN20": "MD2", "JUN21": "MD2", "JUN22": "MD2",
-    # MD3 — Jun 25–27 (all final-group matches simultaneous within group)
-    "JUN25": "MD3", "JUN26": "MD3", "JUN27": "MD3",
-    # KO windows — exact dates vary
-    "JUN29": "R32", "JUN30": "R32",
-    "JUL01": "R32", "JUL02": "R32", "JUL03": "R32",
-    "JUL04": "R16", "JUL05": "R16", "JUL06": "R16", "JUL07": "R16",
-    "JUL09": "QF",  "JUL10": "QF",  "JUL11": "QF",
-    "JUL14": "SF",  "JUL15": "SF",
-    "JUL18": "3rd",
-    "JUL19": "Final",
+# Month-name → 2-digit month for converting Kalshi ticker dates ("JUN11")
+# into ISO dates ("2026-06-11").
+_MONTH_MAP = {
+    "JAN": "01", "FEB": "02", "MAR": "03", "APR": "04",
+    "MAY": "05", "JUN": "06", "JUL": "07", "AUG": "08",
+    "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12",
 }
 
 # Kalshi futures event suffix → our cumulative round_probs key.
@@ -134,11 +120,8 @@ class NationOdds:
             next_prob = self.round_probs.get(next_rnd) if next_rnd else None
 
             if rnd == "Final":
-                # Conditional final win = P(win trophy) / P(reach Final).
-                # We store P(reach Final) as round_probs["Final"] — wait, this
-                # conflicts with P(win trophy).  Treat round_probs["Final"]
-                # as P(reach Final) and self.round_probs.get("Champion") as
-                # P(win).  Fall back to None when missing.
+                # round_probs["Final"] = P(reach Final); round_probs["Champion"]
+                # = P(win trophy).  Conditional final-game win = champ / reach.
                 champ = self.round_probs.get("Champion")
                 reach_final = curr
                 if champ is not None and reach_final and reach_final > 0:
@@ -251,31 +234,117 @@ def price_to_prob(market: dict) -> float:
 
 # ── Market parsing ─────────────────────────────────────────────────────────────
 
-# Per-game ticker shape — PLACEHOLDER format (verify via discover_tickers.py):
-#   KXFIFAWC26GAME-26JUN11MEXNOR-MEX
-#                  ^^^^^^^ ^^^^^^  ^^^
-#                  date+matchup    team FIFA code
-#
-# We extract:
-#   - team_code (last segment)
-#   - round_code (from JUNxx / JULxx prefix)
+# Per-game ticker shape (CONFIRMED via Kalshi qualifiers):
+#   KXFIFAGAME-26JUN11MEXKOR-MEX
+#              ^^^^^^^ ^^^^^^  ^^^
+#              date+matchup    team FIFA code | "TIE"
+
+
+def _kalshi_date_to_iso(date_str: str) -> str | None:
+    """Convert a Kalshi-embedded date like 'JUN11' → '2026-06-11'."""
+    if len(date_str) != 5:
+        return None
+    mon, dd = date_str[:3], date_str[3:]
+    m = _MONTH_MAP.get(mon)
+    if m is None or not dd.isdigit():
+        return None
+    return f"2026-{m}-{dd}"
+
+
+def _build_team_date_to_round_map() -> dict[tuple[str, str], str]:
+    """Build a {(fifa_code, ISO date) → matchday code} lookup at import time.
+
+    Resolves the date-overlap problem where the same calendar day (e.g.
+    Jun 16) is MD2 for Group A and MD1 for Group K.  By keying on the
+    team's FIFA code, the matchday is unambiguous.
+    """
+    from .fixtures import build_group_matches
+    lookup: dict[tuple[str, str], str] = {}
+    for m in build_group_matches():
+        if m.team_a:
+            lookup[(m.team_a.fifa_code, m.date)] = m.round
+        if m.team_b:
+            lookup[(m.team_b.fifa_code, m.date)] = m.round
+    return lookup
+
+
+_TEAM_DATE_TO_ROUND: dict[tuple[str, str], str] | None = None
+
+
+def _team_date_to_round(team_code: str, date_str: str) -> str | None:
+    """Resolve (team_code, Kalshi date prefix) → round code.
+
+    Order of resolution:
+      1. Exact group-stage match from matches.json (team + ISO date).
+      2. Group-stage tolerant fallback — if the team has 3 group-stage
+         dates configured and the requested date is within the group
+         stage window (Jun 11–27), classify by ordinal position
+         (earliest = MD1, middle = MD2, latest = MD3).  This handles
+         the case where my matches.json date guesses don't quite match
+         the FIFA-published per-group schedule.
+      3. KO date-window match from matches.json.
+    Returns None if nothing matches.
+    """
+    global _TEAM_DATE_TO_ROUND
+    if _TEAM_DATE_TO_ROUND is None:
+        _TEAM_DATE_TO_ROUND = _build_team_date_to_round_map()
+
+    iso = _kalshi_date_to_iso(date_str)
+    if iso is None:
+        return None
+
+    # 1. Exact (team, date) hit
+    md = _TEAM_DATE_TO_ROUND.get((team_code, iso))
+    if md:
+        return md
+
+    # 2. Tolerant group-stage fallback by ordinal position
+    if "2026-06-11" <= iso <= "2026-06-27":
+        team_dates = sorted(
+            d for (code, d) in _TEAM_DATE_TO_ROUND.keys() if code == team_code
+        )
+        if len(team_dates) == 3:
+            ordered = ["MD1", "MD2", "MD3"]
+            # Insert iso into the sorted dates and see where it falls.
+            for idx, d in enumerate(team_dates):
+                if iso <= d:
+                    return ordered[idx]
+            return "MD3"  # later than all configured group dates
+
+    # 3. KO date windows
+    from .fixtures import knockout_windows
+    windows = knockout_windows()
+    for rnd in ("R32", "R16", "QF", "SF", "Final"):
+        w = windows.get(rnd, {}) or {}
+        start = w.get("start") or w.get("date")
+        end = w.get("end") or w.get("date")
+        if start and end and start <= iso <= end:
+            return rnd
+
+    return None
+
 
 def _parse_game_ticker(ticker: str) -> tuple[str | None, str | None, str | None]:
     """Extract (team_fifa_code, round_code, date_str) from a game-market ticker.
 
-    Returns (None, None, None) if it doesn't match the expected shape.
+    Returns (None, None, None) if the ticker is malformed, the team code
+    is "TIE" (draw market — irrelevant for survivor), or the round can't
+    be resolved.
     """
     parts = ticker.split("-")
     if len(parts) < 3 or parts[0] != SERIES_TICKER:
         return None, None, None
 
     team_code = parts[-1]
-    game_part = parts[1]  # e.g. "26JUN11MEXNOR"
+    if team_code == "TIE":
+        return None, None, None
+
+    game_part = parts[1]  # e.g. "26JUN11MEXKOR"
     if len(game_part) < 7:
         return None, None, None
     date_str = game_part[2:7]  # e.g. "JUN11"
 
-    round_code = _DATE_TO_ROUND.get(date_str)
+    round_code = _team_date_to_round(team_code, date_str)
     return team_code, round_code, date_str
 
 
@@ -474,9 +543,18 @@ def fetch_odds() -> list[NationOdds]:
         round_probs = dict(futures_probs.get(code, {}))
         round_urls = dict(futures_urls.get(code, {}))
 
-        md_probs = dict(game_probs.get(code, {}))
-        md_urls = dict(game_urls.get(code, {}))
-        md_dates = dict(game_dates.get(code, {}))
+        # Per-game markets may surface both group-stage AND knockout matches.
+        # Route only the group-stage ones into matchday_probs; the KO per-game
+        # signal is left out until we have a use for it (e.g. a fallback when
+        # futures aren't listed).
+        team_games = game_probs.get(code, {})
+        md_probs = {r: p for r, p in team_games.items() if r in {"MD1", "MD2", "MD3"}}
+        md_urls = {
+            r: u for r, u in game_urls.get(code, {}).items() if r in {"MD1", "MD2", "MD3"}
+        }
+        md_dates = {
+            r: d for r, d in game_dates.get(code, {}).items() if r in {"MD1", "MD2", "MD3"}
+        }
 
         # Lookup opponents for each matchday for display.
         md_opps: dict[str, str] = {}
