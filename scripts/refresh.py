@@ -39,43 +39,38 @@ def save_snapshot(snapshot: list[dict], snapshot_dir: Path) -> Path:
     return path
 
 
-# Below this number of nations with ANY Kalshi data (futures OR per-game)
-# → treat as empty/sample and skip the HTML overwrite to preserve whatever
-# was last live.  Generous threshold of 1 — show whatever we have.
-MIN_NATIONS_WITH_DATA = 1
-
-
 def main():
     logger.info("Starting refresh", base_url=settings.kalshi_base_url, current_round=settings.current_round)
 
-    # 1. Fetch odds
-    odds = fetch_odds()
+    # 1. Fetch odds.  is_sample is True only when NO live Kalshi data was
+    #    available (sample odds populate all 48 nations, so a row count can't
+    #    tell sample from real — the flag is the reliable signal).
+    odds, is_sample = fetch_odds()
     nations_with_futures = sum(1 for o in odds if o.round_probs)
     nations_with_games = sum(1 for o in odds if o.matchday_probs)
-    nations_with_data = sum(1 for o in odds if o.round_probs or o.matchday_probs)
     logger.info(
         "Odds fetched",
         nations=len(odds),
         with_futures=nations_with_futures,
         with_games=nations_with_games,
+        is_sample=is_sample,
     )
 
     # 2. Save snapshot (always)
     snapshot = odds_to_snapshot(odds)
     save_snapshot(snapshot, Path(settings.snapshot_dir))
 
-    # 3. Guard: don't overwrite live HTML with empty/sample data
+    # 3. Guard: never overwrite the live page with placeholder data.
     html_path = Path(settings.html_output_path)
-    if nations_with_data < MIN_NATIONS_WITH_DATA:
+    if is_sample:
         logger.warning(
-            "No Kalshi WC data yet — skipping HTML overwrite. "
-            "Snapshot still saved for diagnostics.",
-            nations_with_data=nations_with_data,
+            "No live Kalshi WC data — skipping HTML overwrite to preserve the "
+            "last real page. Snapshot still saved for diagnostics."
         )
         return
 
     # 4. Generate HTML
-    generate_html(odds, html_path)
+    generate_html(odds, html_path, is_sample=is_sample)
     logger.info("Refresh complete", html=str(html_path))
 
 

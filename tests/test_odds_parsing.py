@@ -68,27 +68,46 @@ def test_ko_window_falls_through_to_round():
 
 def test_tie_market_skipped():
     """The 'TIE' contract under each event is irrelevant for survivor."""
-    team, rnd, date = _parse_game_ticker("KXFIFAGAME-26JUN11MEXKOR-TIE")
+    team, rnd, date = _parse_game_ticker("KXWCGAME-26JUN11MEXKOR-TIE")
     assert team is None
     assert rnd is None
     assert date is None
 
 
 def test_parse_game_ticker_happy_path():
-    team, rnd, date = _parse_game_ticker("KXFIFAGAME-26JUN11MEXKOR-MEX")
+    team, rnd, date = _parse_game_ticker("KXWCGAME-26JUN11MEXKOR-MEX")
     assert team == "MEX"
     assert rnd == "MD1"
     assert date == "JUN11"
     assert team in FIFA_CODE_MAP
 
 
+def test_parse_game_ticker_normalizes_fifa_code():
+    """Kalshi uses DZA for Algeria; our groups.json uses ALG."""
+    team, rnd, date = _parse_game_ticker("KXWCGAME-26JUN27DZAxyz-DZA")
+    assert team == "ALG"
+    assert date == "JUN27"
+    assert team in FIFA_CODE_MAP
+
+
+def test_champion_alpha2_map_resolves():
+    """The champion event uses alpha-2 ISO codes; FR must map to FRA."""
+    from src.odds import _norm_code
+
+    assert _norm_code("FR") == "FRA"
+    assert _norm_code("FRA") in FIFA_CODE_MAP
+    assert _norm_code("GB") == "ENG"  # Great Britain → England
+    assert _norm_code("DZA") == "ALG"  # 3-letter mismatch still normalises
+
+
 def test_parse_game_ticker_malformed():
-    # Wrong series
+    # Wrong series — KXFIFAGAME is no longer the WC game series.
+    assert _parse_game_ticker("KXFIFAGAME-26MAR31SWEPOL-SWE") == (None, None, None)
     assert _parse_game_ticker("KXNCAAMBGAME-26MAR19-DUKE") == (None, None, None)
     # Too short
-    assert _parse_game_ticker("KXFIFAGAME-X-Y") == (None, None, None)
+    assert _parse_game_ticker("KXWCGAME-X-Y") == (None, None, None)
     # Unknown team code resolves no round → still returns code + date
-    team, rnd, date = _parse_game_ticker("KXFIFAGAME-26JUN11ZZZQQQ-ZZZ")
+    team, rnd, date = _parse_game_ticker("KXWCGAME-26JUN11ZZZQQQ-ZZZ")
     assert team == "ZZZ"
     assert rnd is None  # unresolved
     assert date == "JUN11"

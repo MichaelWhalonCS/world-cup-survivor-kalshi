@@ -1,30 +1,34 @@
 """Fetch 2026 FIFA World Cup odds from Kalshi.
 
-Two market types:
+Market types (all CONFIRMED live on Kalshi as of 2026-06-24):
 
-1. **Per-game markets** (``KXFIFAGAME`` series — CONFIRMED live on Kalshi)
+1. **Per-game markets** (``KXWCGAME`` series)
    For each match Kalshi lists three binary contracts on a single event:
-     KXFIFAGAME-{YY}{MMM}{DD}{T1}{T2}-{T1 | T2 | TIE}
-   Example: ``KXFIFAGAME-26MAR31SWEPOL-SWE`` is the YES-Sweden-wins
-   contract on the Sweden vs Poland match on Mar 31, 2026.
-   Survivor pool only cares about outright wins, so the "TIE" markets
-   are skipped.
+     KXWCGAME-{YY}{MMM}{DD}{T1}{T2}-{T1 | T2 | TIE}
+   Example: ``KXWCGAME-26JUN27JORARG-ARG`` is the YES-Argentina-wins
+   contract on the Jordan vs Argentina match.  The last segment is a FIFA
+   code or "TIE".  Survivor pool only cares about outright wins, so the
+   "TIE" markets are skipped.
 
-2. **Tournament futures** (``FUTURES_SERIES`` / ``CHAMP_EVENT``)
-   Per-team, per-round advancement markets — e.g. "Will USA reach the
-   Round of 16?"  As of 2026-06-02, Kalshi has NOT yet listed any WC
-   tournament futures.  We expect them to appear close to the kickoff
-   on Jun 11.  When they do, plug the discovered tickers into
-   ``FUTURES_SERIES`` / ``CHAMP_EVENT`` below and the rest of the
-   pipeline will pick them up automatically.
+2. **Per-round advancement futures** (``KXWCROUND`` series)
+   Per-team "reach round X" markets — e.g. "Will USA reach the Round of
+   16?".  Event suffix → round_probs key:
+     26RO16  → "R16"
+     26QUAR  → "QF"
+     26SEMI  → "SF"
+     26FINAL → "Final" (reach the final)
+   There is no R32 suffix in this series — see the qualify series below.
 
-   Conjectured event suffix → round_probs key mapping (verify when listed):
-     R32 → "R32"  (reaching R32 = surviving the group stage)
-     R16 → "R16"
-     QF  → "QF"
-     SF  → "SF"
-     FNL → "Final" (reaching the final)
-     winner-of-tournament event → "Champion"
+3. **Group-qualification futures** (``KXWCGROUPQUAL`` series)
+   "Will <team> qualify from its group?" = reach the Round of 32.  Every
+   market in this series maps to round_probs key "R32".
+   Example: ``KXWCGROUPQUAL-26L-ENG``.
+
+4. **Champion** (event ``KXMENWORLDCUP-26``)
+   Per-team "win the tournament" markets — e.g. ``KXMENWORLDCUP-26-US``.
+   Stored under round_probs key "Champion".  NOTE: this event uses MIXED
+   ISO codes (mostly alpha-2) that must be normalised to our FIFA codes
+   (see ``_KALSHI_CODE_ALIASES`` / ``_norm_code``).
 """
 
 from __future__ import annotations
@@ -49,13 +53,15 @@ logger = structlog.get_logger()
 
 # ── Market configuration ───────────────────────────────────────────────────────
 
-# Per-game W/D/L markets — confirmed live on Kalshi as of 2026-06-02.
-SERIES_TICKER = "KXFIFAGAME"
+# Per-game W/D/L markets.
+SERIES_TICKER = "KXWCGAME"
 
-# Tournament futures — NOT YET LISTED by Kalshi as of 2026-06-02.  Set to None
-# until they appear; the fetch logic will skip futures cleanly when None.
-FUTURES_SERIES: str | None = None       # e.g. "KXFIFAWC26ROUND" once listed
-CHAMP_EVENT: str | None = None          # e.g. "KXFIFAWC-26" once listed
+# Per-round advancement futures (reach R16/QF/SF/Final).
+FUTURES_SERIES: str | None = "KXWCROUND"
+# Group qualification = reach R32.
+GROUPQUAL_SERIES: str | None = "KXWCGROUPQUAL"
+# Championship winner event.
+CHAMP_EVENT: str | None = "KXMENWORLDCUP-26"
 
 # Month-name → 2-digit month for converting Kalshi ticker dates ("JUN11")
 # into ISO dates ("2026-06-11").
@@ -65,19 +71,42 @@ _MONTH_MAP = {
     "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12",
 }
 
-# Kalshi futures event suffix → our cumulative round_probs key.
+# Kalshi KXWCROUND event suffix → our cumulative round_probs key.
 _FUTURES_EVENT_TO_ROUND: dict[str, str] = {
-    "26R32": "R32",
-    "26R16": "R16",
-    "26QF":  "QF",
-    "26SF":  "SF",
-    "26FNL": "Final",
-    "26F":   "Final",  # tolerant fallback
+    "26RO16":  "R16",
+    "26QUAR":  "QF",
+    "26SEMI":  "SF",
+    "26FINAL": "Final",
 }
 
-_KALSHI_GAME_URL_BASE = "https://kalshi.com/markets/kxfifagame"
-_KALSHI_ROUND_URL_BASE = "https://kalshi.com/markets/kxfifawc26round"
-_KALSHI_CHAMP_URL_BASE = "https://kalshi.com/markets/kxfifawc"
+# Kalshi team codes that differ from our data/groups.json FIFA codes.
+# Applied via _norm_code() before any FIFA_CODE_MAP lookup.
+#   - KXWCGAME/KXWCROUND/KXWCGROUPQUAL use FIFA codes that mostly match,
+#     except DZA->ALG, HTI->HAI, IRI->IRN.
+#   - KXMENWORLDCUP uses MIXED ISO codes (mostly alpha-2).
+_KALSHI_CODE_ALIASES: dict[str, str] = {
+    # FIFA-code mismatches (3-letter).
+    "DZA": "ALG", "HTI": "HAI", "IRI": "IRN",
+    # Champion-event ISO (alpha-2) → FIFA.
+    "AR": "ARG", "AT": "AUT", "AU": "AUS", "BE": "BEL", "BR": "BRA",
+    "CA": "CAN", "CH": "SUI", "CO": "COL", "DE": "GER", "EC": "ECU",
+    "ES": "ESP", "FR": "FRA", "GB": "ENG", "GH": "GHA", "HR": "CRO",
+    "IR": "IRN", "JP": "JPN", "KR": "KOR", "MA": "MAR", "MX": "MEX",
+    "NL": "NED", "NO": "NOR", "PT": "POR", "PY": "PAR", "SA": "KSA",
+    "SC": "SCO", "SE": "SWE", "SN": "SEN", "TN": "TUN", "TR": "TUR",
+    "US": "USA", "UY": "URU",
+}
+
+
+def _norm_code(code: str) -> str:
+    """Normalise a Kalshi team code to our canonical FIFA code."""
+    return _KALSHI_CODE_ALIASES.get(code, code)
+
+
+_KALSHI_GAME_URL_BASE = "https://kalshi.com/markets/kxwcgame"
+_KALSHI_ROUND_URL_BASE = "https://kalshi.com/markets/kxwcround"
+_KALSHI_GROUPQUAL_URL_BASE = "https://kalshi.com/markets/kxwcgroupqual"
+_KALSHI_CHAMP_URL_BASE = "https://kalshi.com/markets/kxmenworldcup"
 
 
 # ── Data structures ────────────────────────────────────────────────────────────
@@ -338,6 +367,7 @@ def _parse_game_ticker(ticker: str) -> tuple[str | None, str | None, str | None]
     team_code = parts[-1]
     if team_code == "TIE":
         return None, None, None
+    team_code = _norm_code(team_code)
 
     game_part = parts[1]  # e.g. "26JUN11MEXKOR"
     if len(game_part) < 7:
@@ -367,15 +397,18 @@ def _is_closed(mdict: dict) -> bool:
 
 
 def _fetch_all_markets(client, **kwargs) -> list[dict]:
-    """Fetch markets via pykalshi and convert to plain dicts."""
-    result = client.get_markets(**kwargs, limit=1000)
-    if isinstance(result, dict):
-        raw = result.get("markets", [])
-    elif hasattr(result, "to_dicts"):
-        raw = result.to_dicts()
-    else:
-        raw = list(result)
-    return [_market_to_dict(m) for m in raw]
+    """Fetch markets as RAW dicts via the paginated REST path.
+
+    Uses ``client.paginated_get('/markets', 'markets', params,
+    fetch_all=True)`` rather than the typed ``get_markets`` helper.  The
+    typed pydantic model populates only the integer price fields
+    (last_price, yes_bid, yes_ask) which are all None on these markets;
+    the real prices live in the ``*_dollars`` STRING fields that exist
+    only in the raw REST JSON.  Returning raw dicts lets ``price_to_prob``
+    read those.  ``kwargs`` carries ``series_ticker`` OR ``event_ticker``.
+    """
+    params = {**kwargs, "limit": 1000}
+    return client.paginated_get("/markets", "markets", params, fetch_all=True)
 
 
 # ── Game markets ───────────────────────────────────────────────────────────────
@@ -436,11 +469,11 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
         probs: nation_code → {round_code → cumulative probability}
         urls:  nation_code → {round_code → market URL}
 
-    Returns empty dicts when ``FUTURES_SERIES`` / ``CHAMP_EVENT`` haven't
-    been set yet (Kalshi hasn't listed them).
+    Returns empty dicts when none of the futures series / champion event
+    are configured.
     """
-    if FUTURES_SERIES is None and CHAMP_EVENT is None:
-        logger.info("Kalshi tournament futures not yet listed — skipping")
+    if FUTURES_SERIES is None and GROUPQUAL_SERIES is None and CHAMP_EVENT is None:
+        logger.info("Kalshi tournament futures not configured — skipping")
         return {}, {}
 
     try:
@@ -449,7 +482,11 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
         logger.warning("Could not initialise Kalshi client for futures", exc_info=True)
         return {}, {}
 
-    # 1. Per-round advancement
+    probs: dict[str, dict[str, float]] = {}
+    urls: dict[str, dict[str, str]] = {}
+    unresolved: set[str] = set()
+
+    # 1. Per-round advancement (KXWCROUND → R16/QF/SF/Final)
     round_markets: list[dict] = []
     if FUTURES_SERIES:
         try:
@@ -457,22 +494,23 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
         except Exception:
             logger.exception("Failed to fetch round futures markets")
 
-    probs: dict[str, dict[str, float]] = {}
-    urls: dict[str, dict[str, str]] = {}
-
     for mdict in round_markets:
         if _is_closed(mdict):
             continue
         ticker = mdict.get("ticker", "")
         event_ticker = mdict.get("event_ticker", "")
-        # KXFIFAWC26ROUND-26R16-USA
+        # KXWCROUND-26RO16-USA
         parts = ticker.split("-")
         if len(parts) < 3:
             continue
-        team_code = parts[-1]
+        raw_code = parts[-1]
         event_suffix = parts[1]
         round_code = _FUTURES_EVENT_TO_ROUND.get(event_suffix)
-        if round_code is None or team_code not in FIFA_CODE_MAP:
+        if round_code is None:
+            continue
+        team_code = _norm_code(raw_code)
+        if team_code not in FIFA_CODE_MAP:
+            unresolved.add(raw_code)
             continue
 
         prob = price_to_prob(mdict)
@@ -483,7 +521,38 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
                     f"{_KALSHI_ROUND_URL_BASE}/{event_ticker.lower()}"
                 )
 
-    # 2. Championship winner
+    # 2. Group qualification (KXWCGROUPQUAL → reach R32)
+    groupqual_markets: list[dict] = []
+    if GROUPQUAL_SERIES:
+        try:
+            groupqual_markets = _fetch_all_markets(client, series_ticker=GROUPQUAL_SERIES)
+        except Exception:
+            logger.exception("Failed to fetch group-qualification markets")
+
+    for mdict in groupqual_markets:
+        if _is_closed(mdict):
+            continue
+        ticker = mdict.get("ticker", "")
+        event_ticker = mdict.get("event_ticker", "")
+        # KXWCGROUPQUAL-26L-ENG
+        parts = ticker.split("-")
+        if len(parts) < 3:
+            continue
+        raw_code = parts[-1]
+        team_code = _norm_code(raw_code)
+        if team_code not in FIFA_CODE_MAP:
+            unresolved.add(raw_code)
+            continue
+
+        prob = price_to_prob(mdict)
+        if prob > 0:
+            probs.setdefault(team_code, {})["R32"] = prob
+            if event_ticker:
+                urls.setdefault(team_code, {})["R32"] = (
+                    f"{_KALSHI_GROUPQUAL_URL_BASE}/{event_ticker.lower()}"
+                )
+
+    # 3. Championship winner (KXMENWORLDCUP-26)
     champ_markets: list[dict] = []
     if CHAMP_EVENT:
         try:
@@ -498,8 +567,10 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
         parts = ticker.split("-")
         if len(parts) < 3:
             continue
-        team_code = parts[-1]
+        raw_code = parts[-1]
+        team_code = _norm_code(raw_code)
         if team_code not in FIFA_CODE_MAP:
+            unresolved.add(raw_code)
             continue
         prob = price_to_prob(mdict)
         if prob > 0:
@@ -511,31 +582,44 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
                     f"{_KALSHI_CHAMP_URL_BASE}/{event_ticker.lower()}"
                 )
 
+    if unresolved:
+        logger.warning(
+            "Kalshi futures codes not resolved to a nation (out of scope)",
+            codes=sorted(unresolved),
+        )
+
     logger.info(
         "Kalshi futures fetched",
         teams=len(probs),
         rounds=sorted({r for d in probs.values() for r in d}),
+        unresolved=sorted(unresolved),
     )
     return probs, urls
 
 
 # ── Main fetch ─────────────────────────────────────────────────────────────────
 
-def fetch_odds() -> list[NationOdds]:
+def fetch_odds() -> tuple[list[NationOdds], bool]:
     """Fetch odds entirely from Kalshi prediction markets and assemble
     a NationOdds record for every nation in the tournament.
 
-    Per-game markets (KXFIFAGAME) and tournament futures are fetched
+    Per-game markets (KXWCGAME) and tournament futures are fetched
     independently; either one alone is enough to populate the table.
     Falls back to sample odds only when BOTH are empty (e.g. before
     Kalshi has listed any WC markets).
+
+    Returns:
+        (odds, is_sample) — ``is_sample`` is True when no live Kalshi data
+        was available and the returned odds are placeholder values.  Callers
+        MUST surface this to users (loud banner) so fake numbers are never
+        mistaken for real market prices.
     """
     futures_probs, futures_urls = _fetch_futures()
     game_probs, game_urls, game_dates = _fetch_game_markets()
 
     if not futures_probs and not game_probs:
         logger.warning("No Kalshi WC data yet — falling back to sample odds")
-        return _generate_sample_odds()
+        return _generate_sample_odds(), True
 
     result: list[NationOdds] = []
     for nation in get_all_nations():
@@ -580,7 +664,7 @@ def fetch_odds() -> list[NationOdds]:
         with_futures=teams_with_futures,
         with_game_markets=teams_with_games,
     )
-    return result
+    return result, False
 
 
 # ── Sample data generation (for dev / template testing) ────────────────────────

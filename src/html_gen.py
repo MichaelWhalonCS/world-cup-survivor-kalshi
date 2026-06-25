@@ -76,8 +76,14 @@ def _best_pick_sort_value(odds: NationOdds) -> float:
     return idx * 10 + prob
 
 
-def generate_html(odds: list[NationOdds], output_path: Path) -> None:
-    """Render templates/table.html with NationOdds and write to output_path."""
+def generate_html(
+    odds: list[NationOdds], output_path: Path, is_sample: bool = False
+) -> None:
+    """Render templates/table.html with NationOdds and write to output_path.
+
+    When ``is_sample`` is True the page renders a loud banner warning that the
+    numbers are placeholder data, not live Kalshi market prices.
+    """
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(str(TEMPLATE_DIR)),
         autoescape=True,
@@ -172,6 +178,7 @@ def generate_html(odds: list[NationOdds], output_path: Path) -> None:
         nation_count=len([r for r in rows if not r["eliminated"]]),
         groups=sorted({r["group"] for r in rows}),
         confederations=sorted({r["confederation"] for r in rows}),
+        is_sample=is_sample,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
