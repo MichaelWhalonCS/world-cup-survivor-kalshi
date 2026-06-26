@@ -3,7 +3,31 @@ order-book price gap-filler."""
 
 from src.html_gen import _win_and_out
 from src.odds import NationOdds, _orderbook_midpoint
-from src.teams import Nation
+from src.teams import KO_ROUNDS, ROUND_LABELS, Nation
+
+
+# ── KO column labels must name the SAME stage their data represents ───────────
+# round_probs[X] = P(reach stage X), so the header for column X must read
+# "Make <X>" — never the next stage (regression for the off-by-one bug where
+# R32's P(reach R32) was displayed under a "Make R16" header).
+
+def test_ko_labels_name_their_own_stage():
+    expected = {
+        "R32": "Make R32",
+        "R16": "Make R16",
+        "QF": "Make QF",
+        "SF": "Make SF",
+        "Final": "Make Final",
+    }
+    for rnd in KO_ROUNDS:
+        assert ROUND_LABELS[rnd] == expected[rnd]
+
+
+def test_ko_labels_are_not_off_by_one():
+    # No KO label may name the stage that comes AFTER it.
+    nxt = {"R32": "R16", "R16": "QF", "QF": "SF", "SF": "Final"}
+    for rnd, after in nxt.items():
+        assert ROUND_LABELS[after] not in ROUND_LABELS[rnd]
 
 
 def _nation(code="FRA"):

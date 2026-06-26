@@ -34,7 +34,7 @@ Market types (all CONFIRMED live on Kalshi as of 2026-06-24):
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import structlog
 
@@ -323,6 +323,75 @@ def _kalshi_date_to_iso(date_str: str) -> str | None:
     return f"2026-{m}-{dd}"
 
 
+# First knockout (Round of 32) date.  Group-stage games are strictly before
+# this; anything on/after it is a knockout match.  Per matches.json + the
+# FIFA-published 2026 schedule the R32 window opens 2026-06-29.
+_R32_START_ISO = "2026-06-29"
+
+
+def _parse_game_pairing(ticker: str) -> tuple[str | None, str | None, str | None]:
+    """Extract (iso_date, team_a_code, team_b_code) from a KXWCGAME ticker.
+
+    ``KXWCGAME-26JUN22FRAIRQ-FRA`` → ("2026-06-22", "FRA", "IRQ").  The suffix
+    (FRA | IRQ | TIE) is ignored — both nations are read from the game part so
+    a single TIE ticker still encodes the full pairing + date.  Codes are
+    normalised to our FIFA codes.  Returns (None, None, None) if malformed.
+    """
+    parts = ticker.split("-")
+    if len(parts) < 3 or parts[0] != SERIES_TICKER:
+        return None, None, None
+    game_part = parts[1]  # e.g. "26JUN22FRAIRQ"
+    if len(game_part) < 13:
+        return None, None, None
+    iso = _kalshi_date_to_iso(game_part[2:7])
+    if iso is None:
+        return None, None, None
+    team_a = _norm_code(game_part[7:10])
+    team_b = _norm_code(game_part[10:13])
+    return iso, team_a, team_b
+
+
+def _build_group_schedule(markets) -> dict[str, dict[str, dict]]:
+    """Build ``fifa_code -> {"MD1"|"MD2"|"MD3": {"date": iso, "opponent": code}}``.
+
+    Derived entirely from KXWCGAME tickers (the authoritative source for real
+    per-match opponents + dates), independent of groups.json slots and
+    matches.json dates.  For each team, collect distinct group-stage
+    ``(iso_date, opponent)`` pairs (dates strictly before the R32 window),
+    sort by date, and assign MD1/MD2/MD3 by ordinal position.  Pass the
+    UNFILTERED market list (including ``finalized`` games) so matchday ordinals
+    stay stable after games settle.
+    """
+    # team -> set of (iso_date, opponent_code); a set dedupes the three
+    # contracts (TEAM_A / TEAM_B / TIE) that share one game part.
+    per_team: dict[str, set[tuple[str, str]]] = {}
+    for mdict in markets:
+        ticker = mdict.get("ticker", "") if isinstance(mdict, dict) else ""
+        iso, team_a, team_b = _parse_game_pairing(ticker)
+        if iso is None:
+            continue
+        if iso >= _R32_START_ISO:
+            continue  # knockout match — not a group-stage matchday
+        per_team.setdefault(team_a, set()).add((iso, team_b))
+        per_team.setdefault(team_b, set()).add((iso, team_a))
+
+    schedule: dict[str, dict[str, dict]] = {}
+    for code, games in per_team.items():
+        ordered = sorted(games)  # (iso_date, opponent) — chronological
+        if len(ordered) != 3:
+            logger.warning(
+                "Team has unexpected group-stage game count",
+                team=code,
+                count=len(ordered),
+                games=ordered,
+            )
+        md_map: dict[str, dict] = {}
+        for idx, (iso, opp) in enumerate(ordered[:3]):
+            md_map[f"MD{idx + 1}"] = {"date": iso, "opponent": opp}
+        schedule[code] = md_map
+    return schedule
+
+
 def _build_team_date_to_round_map() -> dict[tuple[str, str], str]:
     """Build a {(fifa_code, ISO date) → matchday code} lookup at import time.
 
@@ -457,11 +526,18 @@ def _fetch_all_markets(client, **kwargs) -> list[dict]:
 # ── Game markets ───────────────────────────────────────────────────────────────
 
 def _fetch_game_markets() -> tuple[
-    dict[str, dict[str, float]],   # nation_code → {round → prob}
-    dict[str, dict[str, str]],     # nation_code → {round → url}
-    dict[str, dict[str, str]],     # nation_code → {round → date_str}
+    dict[str, dict[str, float]],          # nation_code → {MD → prob}
+    dict[str, dict[str, str]],            # nation_code → {MD → url}
+    dict[str, dict[str, dict]],           # schedule: nation_code → {MD → {date, opponent}}
 ]:
-    """Fetch per-game win probabilities keyed by FIFA code and matchday round."""
+    """Fetch per-game win probabilities + the derived group-stage schedule.
+
+    The schedule (opponents + dates per matchday) is built from ALL KXWCGAME
+    tickers — including finalized games — so it is authoritative and stable.
+    Per-game win probabilities come only from non-closed (tradeable) markets
+    and are resolved to a matchday via the schedule map (team + ISO date → MD),
+    never the ordinal-fallback heuristic.
+    """
     try:
         client = get_client()
         markets = _fetch_all_markets(client, series_ticker=SERIES_TICKER)
@@ -469,10 +545,18 @@ def _fetch_game_markets() -> tuple[
         logger.warning("Could not fetch Kalshi per-game markets", exc_info=True)
         return {}, {}, {}
 
+    schedule = _build_group_schedule(markets)
+
+    # Reverse lookup: (team_code, iso_date) → matchday code.
+    date_to_md: dict[tuple[str, str], str] = {}
+    for code, mds in schedule.items():
+        for md, info in mds.items():
+            date_to_md[(code, info["date"])] = md
+
     probs: dict[str, dict[str, float]] = {}
     urls: dict[str, dict[str, str]] = {}
-    dates: dict[str, dict[str, str]] = {}
     skipped = 0
+    unmapped = 0
 
     for mdict in markets:
         if _is_closed(mdict):
@@ -481,10 +565,28 @@ def _fetch_game_markets() -> tuple[
 
         ticker = mdict.get("ticker", "")
         event_ticker = mdict.get("event_ticker", "")
-        team_code, round_code, date_str = _parse_game_ticker(ticker)
-        if not team_code or not round_code:
+        parts = ticker.split("-")
+        if len(parts) < 3 or parts[0] != SERIES_TICKER:
             continue
+        team_code = parts[-1]
+        if team_code == "TIE":
+            continue
+        team_code = _norm_code(team_code)
         if team_code not in FIFA_CODE_MAP:
+            continue
+
+        iso, _, _ = _parse_game_pairing(ticker)
+        if iso is None or iso >= _R32_START_ISO:
+            continue  # malformed or knockout — only group-stage games here
+        md = date_to_md.get((team_code, iso))
+        if md is None:
+            # Schedule map is authoritative; a real ticker that doesn't resolve
+            # means the team's group-stage set was incomplete — log, don't guess.
+            unmapped += 1
+            logger.warning(
+                "Group-stage market not in schedule map", ticker=ticker,
+                team=team_code, date=iso,
+            )
             continue
 
         prob = price_to_prob(mdict)
@@ -494,43 +596,80 @@ def _fetch_game_markets() -> tuple[
         if prob <= 0:
             continue
 
-        probs.setdefault(team_code, {})[round_code] = prob
+        probs.setdefault(team_code, {})[md] = prob
         if event_ticker:
-            urls.setdefault(team_code, {})[round_code] = (
+            urls.setdefault(team_code, {})[md] = (
                 f"{_KALSHI_GAME_URL_BASE}/{event_ticker.lower()}"
             )
-        if date_str:
-            dates.setdefault(team_code, {})[round_code] = date_str
 
-    logger.info("Kalshi per-game markets fetched", parsed=len(probs), skipped_closed=skipped)
-    return probs, urls, dates
+    logger.info(
+        "Kalshi per-game markets fetched",
+        parsed=len(probs), skipped_closed=skipped, unmapped=unmapped,
+        scheduled_teams=len(schedule),
+    )
+    return probs, urls, schedule
 
 
 # ── Futures markets ────────────────────────────────────────────────────────────
 
-def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, str]]]:
+def _settled_yes(mdict: dict) -> bool | None:
+    """For a closed market, did the YES side win?
+
+    Reads the Kalshi ``result`` field ("yes"/"no"); falls back to
+    ``settled_value`` then to the implied price (≥ 0.5 ⇒ YES).  Returns None
+    when settlement can't be determined.
+    """
+    result = mdict.get("result")
+    if result:
+        r = str(result).strip().lower()
+        if r == "yes":
+            return True
+        if r == "no":
+            return False
+    sv = mdict.get("settled_value")
+    if sv is not None:
+        try:
+            return float(sv) >= 0.5
+        except (TypeError, ValueError):
+            pass
+    prob = price_to_prob(mdict)
+    if prob > 0:
+        return prob >= 0.5
+    return None
+
+
+def _fetch_futures() -> tuple[
+    dict[str, dict[str, float]],   # nation_code → {round_code → cumulative prob}
+    dict[str, dict[str, str]],     # nation_code → {round_code → market URL}
+    set[str],                      # eliminated nation codes
+]:
     """Fetch Kalshi tournament futures.
 
     Returns:
         probs: nation_code → {round_code → cumulative probability}
         urls:  nation_code → {round_code → market URL}
+        eliminated: nation codes whose group qualification settled NO (out),
+                    with the conservative guard that no team holding any active
+                    advancement market is ever marked eliminated.
 
-    Returns empty dicts when none of the futures series / champion event
+    Returns empty containers when none of the futures series / champion event
     are configured.
     """
     if FUTURES_SERIES is None and GROUPQUAL_SERIES is None and CHAMP_EVENT is None:
         logger.info("Kalshi tournament futures not configured — skipping")
-        return {}, {}
+        return {}, {}, set()
 
     try:
         client = get_client()
     except Exception:
         logger.warning("Could not initialise Kalshi client for futures", exc_info=True)
-        return {}, {}
+        return {}, {}, set()
 
     probs: dict[str, dict[str, float]] = {}
     urls: dict[str, dict[str, str]] = {}
     unresolved: set[str] = set()
+    eliminated: set[str] = set()      # groupqual settled NO
+    qual_active: set[str] = set()     # active groupqual market → qualification undecided
 
     # 1. Per-round advancement (KXWCROUND → R16/QF/SF/Final)
     round_markets: list[dict] = []
@@ -578,8 +717,6 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             logger.exception("Failed to fetch group-qualification markets")
 
     for mdict in groupqual_markets:
-        if _is_closed(mdict):
-            continue
         ticker = mdict.get("ticker", "")
         event_ticker = mdict.get("event_ticker", "")
         # KXWCGROUPQUAL-26L-ENG
@@ -588,10 +725,35 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             continue
         raw_code = parts[-1]
         team_code = _norm_code(raw_code)
+        closed = _is_closed(mdict)
         if team_code not in FIFA_CODE_MAP:
-            unresolved.add(raw_code)
+            # Unknown active codes are genuinely unresolved; unknown *finalized*
+            # codes are settled playoff losers (e.g. JAM/NCL) — out of scope,
+            # not a mapping gap, so don't flag them.
+            if not closed:
+                unresolved.add(raw_code)
             continue
 
+        if closed:
+            # Phase B/C: finalized groupqual is a settlement signal, not noise.
+            #   settled YES → clinched a R32 spot  → round_probs["R32"] = 1.0
+            #   settled NO  → out in the group     → round_probs["R32"] = 0.0
+            #                                         + elimination flag
+            won = _settled_yes(mdict)
+            if won is True:
+                probs.setdefault(team_code, {})["R32"] = 1.0
+            elif won is False:
+                probs.setdefault(team_code, {})["R32"] = 0.0
+                eliminated.add(team_code)
+            else:
+                continue
+            if event_ticker:
+                urls.setdefault(team_code, {})["R32"] = (
+                    f"{_KALSHI_GROUPQUAL_URL_BASE}/{event_ticker.lower()}"
+                )
+            continue
+
+        qual_active.add(team_code)  # active groupqual → qualification undecided
         prob = price_to_prob(mdict)
         if prob <= 0:
             prob = _orderbook_midpoint(client, ticker) or 0.0
@@ -640,13 +802,21 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             codes=sorted(unresolved),
         )
 
+    # Conservative guard: never mark a team eliminated while its qualification
+    # is genuinely undecided (an ACTIVE groupqual market).  A finalized groupqual
+    # NO is a definitive group-stage elimination — a team that did not qualify
+    # cannot reach R32, so stale still-open downstream KXWCROUND markets (Kalshi
+    # lag) are NOT treated as a live advancement path and do not rescue it.
+    eliminated -= qual_active
+
     logger.info(
         "Kalshi futures fetched",
         teams=len(probs),
         rounds=sorted({r for d in probs.values() for r in d}),
         unresolved=sorted(unresolved),
+        eliminated=sorted(eliminated),
     )
-    return probs, urls
+    return probs, urls, eliminated
 
 
 # ── Main fetch ─────────────────────────────────────────────────────────────────
@@ -666,8 +836,8 @@ def fetch_odds() -> tuple[list[NationOdds], bool]:
         MUST surface this to users (loud banner) so fake numbers are never
         mistaken for real market prices.
     """
-    futures_probs, futures_urls = _fetch_futures()
-    game_probs, game_urls, game_dates = _fetch_game_markets()
+    futures_probs, futures_urls, eliminated = _fetch_futures()
+    game_probs, game_urls, schedule = _fetch_game_markets()
 
     if not futures_probs and not game_probs:
         logger.warning("No Kalshi WC data yet — falling back to sample odds")
@@ -679,27 +849,33 @@ def fetch_odds() -> tuple[list[NationOdds], bool]:
         round_probs = dict(futures_probs.get(code, {}))
         round_urls = dict(futures_urls.get(code, {}))
 
-        # Per-game markets may surface both group-stage AND knockout matches.
-        # Route only the group-stage ones into matchday_probs; the KO per-game
-        # signal is left out until we have a use for it (e.g. a fallback when
-        # futures aren't listed).
+        # Per-game win probabilities are already keyed by matchday (MD1/2/3),
+        # resolved via the KXWCGAME-derived schedule map.
         team_games = game_probs.get(code, {})
         md_probs = {r: p for r, p in team_games.items() if r in {"MD1", "MD2", "MD3"}}
         md_urls = {
             r: u for r, u in game_urls.get(code, {}).items() if r in {"MD1", "MD2", "MD3"}
         }
-        md_dates = {
-            r: d for r, d in game_dates.get(code, {}).items() if r in {"MD1", "MD2", "MD3"}
-        }
 
-        # Lookup opponents for each matchday for display.
+        # Opponents + dates come entirely from the KXWCGAME schedule map —
+        # independent of groups.json slots and matches.json dates.
+        team_sched = schedule.get(code, {})
         md_opps: dict[str, str] = {}
+        md_dates: dict[str, str] = {}
         for md in ("MD1", "MD2", "MD3"):
-            opp = opponent_for(nation, md)
-            md_opps[md] = opp.fifa_code if opp else "?"
+            info = team_sched.get(md)
+            if info:
+                md_opps[md] = info["opponent"]
+                md_dates[md] = info["date"]
+            else:
+                md_opps[md] = "?"
+
+        # Per-render copy so the elimination flag never leaks into the shared
+        # NATIONS singleton across runs.
+        render_nation = replace(nation, eliminated=(code in eliminated))
 
         result.append(NationOdds(
-            nation=nation,
+            nation=render_nation,
             matchday_probs=md_probs,
             matchday_urls=md_urls,
             matchday_dates=md_dates,

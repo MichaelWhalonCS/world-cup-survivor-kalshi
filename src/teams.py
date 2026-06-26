@@ -29,11 +29,19 @@ ROUND_LABELS = {
     "MD1":   "Matchday 1",
     "MD2":   "Matchday 2",
     "MD3":   "Matchday 3",
-    "R32":   "Make R16",     # cumulative semantics: "P(reach R16)"
-    "R16":   "Make QF",
-    "QF":    "Make SF",
-    "SF":    "Make Final",
-    "Final": "Win Title",
+    # Each KO label names the SAME stage its data represents.
+    # round_probs[X] = P(reach stage X):
+    #   R32   = P(qualify from group / reach Round of 32)   [KXWCGROUPQUAL]
+    #   R16   = P(reach Round of 16)                        [KXWCROUND 26RO16]
+    #   QF    = P(reach Quarter-finals)                     [KXWCROUND 26QUAR]
+    #   SF    = P(reach Semi-finals)                        [KXWCROUND 26SEMI]
+    #   Final = P(reach the Final)                          [KXWCROUND 26FINAL]
+    # The separate "Win Cup" column carries P(win the trophy) [KXMENWORLDCUP].
+    "R32":   "Make R32",
+    "R16":   "Make R16",
+    "QF":    "Make QF",
+    "SF":    "Make SF",
+    "Final": "Make Final",
 }
 
 # Rounds that live in the group stage — survivor logic is per-matchday rather

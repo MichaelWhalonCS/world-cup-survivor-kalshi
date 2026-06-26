@@ -16,7 +16,7 @@ No backend server needed.
 ## Table Features
 
 - **Group-stage matchday columns** (MD1, MD2, MD3) — per-game win probability for each matchday, with opponent FIFA code shown below the percentage
-- **Knockout cumulative columns** (Make R16, Make QF, Make SF, Make Final, Win Cup) — from Kalshi advancement futures
+- **Knockout cumulative columns** (Make R32, Make R16, Make QF, Make SF, Make Final, Win Cup) — probability of *reaching* each stage, from Kalshi advancement futures ("Make R32" = qualifying from the group)
 - **Best Pick column** — the most strategic round to spend each nation in your survivor pool
 - **Sortable columns** — click any header to sort
 - **Color-coded cells** — green (high probability) → red (low probability)
