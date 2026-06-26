@@ -261,6 +261,49 @@ def price_to_prob(market: dict) -> float:
     return 0.0
 
 
+def _orderbook_midpoint(client, ticker: str) -> float | None:
+    """Implied YES probability from a market's resting order book.
+
+    Used only as a GAP-FILLER when ``price_to_prob`` finds no summary price
+    (no last trade / no top-of-book bid/ask).  Kalshi returns the book as
+    ``orderbook_fp`` with ascending ``yes_dollars`` / ``no_dollars`` arrays of
+    ``[price, size]``.  Best YES bid is the highest yes price; the YES ask is
+    ``1 − best NO bid``.  The midpoint of those is the implied probability.
+    Returns None if the book is empty or the request fails.
+    """
+    try:
+        resp = client.get(f"/markets/{ticker}/orderbook")
+    except Exception:
+        logger.debug("Orderbook fetch failed", ticker=ticker, exc_info=True)
+        return None
+
+    book = resp.get("orderbook_fp") or resp.get("orderbook") or resp
+    if isinstance(book, dict) and "orderbook_fp" in book:
+        book = book["orderbook_fp"]
+    if not isinstance(book, dict):
+        return None
+
+    yes_levels = book.get("yes_dollars") or book.get("yes") or []
+    no_levels = book.get("no_dollars") or book.get("no") or []
+
+    def _best(levels) -> float | None:
+        prices = [_normalize_price(p) for p, _ in levels]
+        prices = [p for p in prices if p is not None]
+        return max(prices) if prices else None
+
+    best_yes = _best(yes_levels)
+    best_no = _best(no_levels)
+
+    if best_yes is not None and best_no is not None:
+        yes_ask = 1.0 - best_no
+        return (best_yes + yes_ask) / 2
+    if best_yes is not None:
+        return best_yes
+    if best_no is not None:
+        return 1.0 - best_no
+    return None
+
+
 # ── Market parsing ─────────────────────────────────────────────────────────────
 
 # Per-game ticker shape (CONFIRMED via Kalshi qualifiers):
@@ -446,6 +489,9 @@ def _fetch_game_markets() -> tuple[
 
         prob = price_to_prob(mdict)
         if prob <= 0:
+            # Gap-fill from the order book only when there's no summary price.
+            prob = _orderbook_midpoint(client, ticker) or 0.0
+        if prob <= 0:
             continue
 
         probs.setdefault(team_code, {})[round_code] = prob
@@ -514,6 +560,8 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             continue
 
         prob = price_to_prob(mdict)
+        if prob <= 0:
+            prob = _orderbook_midpoint(client, ticker) or 0.0
         if prob > 0:
             probs.setdefault(team_code, {})[round_code] = prob
             if event_ticker:
@@ -545,6 +593,8 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             continue
 
         prob = price_to_prob(mdict)
+        if prob <= 0:
+            prob = _orderbook_midpoint(client, ticker) or 0.0
         if prob > 0:
             probs.setdefault(team_code, {})["R32"] = prob
             if event_ticker:
@@ -573,6 +623,8 @@ def _fetch_futures() -> tuple[dict[str, dict[str, float]], dict[str, dict[str, s
             unresolved.add(raw_code)
             continue
         prob = price_to_prob(mdict)
+        if prob <= 0:
+            prob = _orderbook_midpoint(client, ticker) or 0.0
         if prob > 0:
             # Store under "Champion" to disambiguate from "reach Final".
             probs.setdefault(team_code, {})["Champion"] = prob

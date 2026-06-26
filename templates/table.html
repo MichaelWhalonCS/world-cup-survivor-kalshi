@@ -442,6 +442,14 @@
           <span class="sort-arrow">&#9650;</span>
         </th>
 
+        <th data-col="winout" onclick="sortTable('winout')">
+          {{ win_out_label }}
+          <span class="info-tip" data-tip="Probability this nation wins this knockout game but loses the next one — P(reach next stage) − P(reach the stage after). A high value flags a likely 'one-and-done': best used in this round rather than saved for later. During the group stage this is anchored to the Round of 32 (the first knockout game).">
+            <span class="info-icon">i</span>
+          </span>
+          <span class="sort-arrow">&#9650;</span>
+        </th>
+
         <th data-col="best" onclick="sortTable('best')">
           Best Pick
           <span class="info-tip" data-tip="The latest round where this nation has ≥65% per-game win probability — i.e. the most strategic round to spend this nation in your survivor pool. Bold blue = safe (≥65%). Italic gray = no safe round; shows the best available.">
@@ -507,6 +515,12 @@
           {% else %}
           {{ row.champ_display }}
           {% endif %}
+        </td>
+
+        <td class="prob-cell"
+            data-winout="{{ row.win_out_prob if row.win_out_prob is not none else '' }}"
+            style="background: {{ row.win_out_bg }}; color: {{ row.win_out_text }};">
+          {{ row.win_out_display }}
         </td>
 
         <td class="col-best{% if not row.best_pick_is_safe %} best-risky{% endif %}">{{ row.best_pick }}</td>
@@ -587,6 +601,9 @@ function sortTable(col) {
     } else if (col === 'champ') {
       va = parseFloat(a.dataset.champ || '-1');
       vb = parseFloat(b.dataset.champ || '-1');
+    } else if (col === 'winout') {
+      va = parseFloat(a.querySelector('[data-winout]') ? a.querySelector('[data-winout]').dataset.winout || '-1' : '-1');
+      vb = parseFloat(b.querySelector('[data-winout]') ? b.querySelector('[data-winout]').dataset.winout || '-1' : '-1');
     } else if (mdIdx >= 0) {
       // MD cells come first in .prob-cell ordering
       var cellA = a.querySelectorAll('.prob-cell')[mdIdx];
