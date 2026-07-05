@@ -1,0 +1,1444 @@
+[
+  {
+    "nation": "Mexico",
+    "fifa_code": "MEX",
+    "group": "A",
+    "pot": 1,
+    "confederation": "CONCACAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-11",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "RSA",
+      "MD2": "KOR",
+      "MD3": "CZE"
+    },
+    "round_probs": {
+      "SF": 0.22,
+      "QF": 0.51,
+      "Final": 0.15,
+      "R32": 1.0,
+      "Champion": 0.053
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26a",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.6818181818181818
+  },
+  {
+    "nation": "South Korea",
+    "fifa_code": "KOR",
+    "group": "A",
+    "pot": 2,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-11",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "CZE",
+      "MD2": "MEX",
+      "MD3": "RSA"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26a"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "South Africa",
+    "fifa_code": "RSA",
+    "group": "A",
+    "pot": 3,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-11",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "MEX",
+      "MD2": "CZE",
+      "MD3": "KOR"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26a"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Czech Republic",
+    "fifa_code": "CZE",
+    "group": "A",
+    "pot": 4,
+    "confederation": "UEFA",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-11",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "KOR",
+      "MD2": "RSA",
+      "MD3": "MEX"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26a"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Canada",
+    "fifa_code": "CAN",
+    "group": "B",
+    "pot": 1,
+    "confederation": "CONCACAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-12",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "BIH",
+      "MD2": "QAT",
+      "MD3": "SUI"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26b"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Switzerland",
+    "fifa_code": "SUI",
+    "group": "B",
+    "pot": 2,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "QAT",
+      "MD2": "BIH",
+      "MD3": "CAN"
+    },
+    "round_probs": {
+      "SF": 0.12,
+      "QF": 0.38,
+      "Final": 0.05,
+      "R32": 1.0,
+      "Champion": 0.008
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26b",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.4166666666666667
+  },
+  {
+    "nation": "Qatar",
+    "fifa_code": "QAT",
+    "group": "B",
+    "pot": 3,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "SUI",
+      "MD2": "CAN",
+      "MD3": "BIH"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26b"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Bosnia and Herzegovina",
+    "fifa_code": "BIH",
+    "group": "B",
+    "pot": 4,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-12",
+      "MD2": "2026-06-18",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "CAN",
+      "MD2": "SUI",
+      "MD3": "QAT"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26b"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Brazil",
+    "fifa_code": "BRA",
+    "group": "C",
+    "pot": 1,
+    "confederation": "CONMEBOL",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "MAR",
+      "MD2": "HAI",
+      "MD3": "SCO"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26c"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Morocco",
+    "fifa_code": "MAR",
+    "group": "C",
+    "pot": 2,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "BRA",
+      "MD2": "SCO",
+      "MD3": "HAI"
+    },
+    "round_probs": {
+      "SF": 0.22,
+      "Final": 0.1,
+      "R32": 1.0,
+      "Champion": 0.026
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26c",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.4545454545454546
+  },
+  {
+    "nation": "Scotland",
+    "fifa_code": "SCO",
+    "group": "C",
+    "pot": 3,
+    "confederation": "UEFA",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "HAI",
+      "MD2": "MAR",
+      "MD3": "BRA"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26c"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Haiti",
+    "fifa_code": "HAI",
+    "group": "C",
+    "pot": 4,
+    "confederation": "CONCACAF",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-13",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-24"
+    },
+    "matchday_opponents": {
+      "MD1": "SCO",
+      "MD2": "BRA",
+      "MD3": "MAR"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26c"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "USA",
+    "fifa_code": "USA",
+    "group": "D",
+    "pot": 1,
+    "confederation": "CONCACAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-12",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "PAR",
+      "MD2": "AUS",
+      "MD3": "TUR"
+    },
+    "round_probs": {
+      "SF": 0.19,
+      "QF": 0.53,
+      "Final": 0.08,
+      "R32": 1.0,
+      "Champion": 0.038
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26d",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "Final",
+    "best_pick_prob": 0.475
+  },
+  {
+    "nation": "Australia",
+    "fifa_code": "AUS",
+    "group": "D",
+    "pot": 2,
+    "confederation": "AFC",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "TUR",
+      "MD2": "USA",
+      "MD3": "PAR"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26d"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Paraguay",
+    "fifa_code": "PAR",
+    "group": "D",
+    "pot": 3,
+    "confederation": "CONMEBOL",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-12",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "USA",
+      "MD2": "TUR",
+      "MD3": "AUS"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26d"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Turkey",
+    "fifa_code": "TUR",
+    "group": "D",
+    "pot": 4,
+    "confederation": "UEFA",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-19",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "AUS",
+      "MD2": "PAR",
+      "MD3": "USA"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26d"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Germany",
+    "fifa_code": "GER",
+    "group": "E",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "CUW",
+      "MD2": "CIV",
+      "MD3": "ECU"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26e"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Ecuador",
+    "fifa_code": "ECU",
+    "group": "E",
+    "pot": 2,
+    "confederation": "CONMEBOL",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "CIV",
+      "MD2": "CUW",
+      "MD3": "GER"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26e"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Ivory Coast",
+    "fifa_code": "CIV",
+    "group": "E",
+    "pot": 3,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "ECU",
+      "MD2": "GER",
+      "MD3": "CUW"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26e"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Curacao",
+    "fifa_code": "CUW",
+    "group": "E",
+    "pot": 4,
+    "confederation": "CONCACAF",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "GER",
+      "MD2": "ECU",
+      "MD3": "CIV"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26e"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Netherlands",
+    "fifa_code": "NED",
+    "group": "F",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "JPN",
+      "MD2": "SWE",
+      "MD3": "TUN"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26f"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Japan",
+    "fifa_code": "JPN",
+    "group": "F",
+    "pot": 2,
+    "confederation": "AFC",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "NED",
+      "MD2": "TUN",
+      "MD3": "SWE"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26f"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Tunisia",
+    "fifa_code": "TUN",
+    "group": "F",
+    "pot": 3,
+    "confederation": "CAF",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "SWE",
+      "MD2": "JPN",
+      "MD3": "NED"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26f"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Sweden",
+    "fifa_code": "SWE",
+    "group": "F",
+    "pot": 4,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-14",
+      "MD2": "2026-06-20",
+      "MD3": "2026-06-25"
+    },
+    "matchday_opponents": {
+      "MD1": "TUN",
+      "MD2": "NED",
+      "MD3": "JPN"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26f"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Belgium",
+    "fifa_code": "BEL",
+    "group": "G",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "EGY",
+      "MD2": "IRN",
+      "MD3": "NZL"
+    },
+    "round_probs": {
+      "SF": 0.13,
+      "QF": 0.47,
+      "Final": 0.05,
+      "R32": 1.0,
+      "Champion": 0.012
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26g",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.38461538461538464
+  },
+  {
+    "nation": "Iran",
+    "fifa_code": "IRN",
+    "group": "G",
+    "pot": 2,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "NZL",
+      "MD2": "BEL",
+      "MD3": "EGY"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26g"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Egypt",
+    "fifa_code": "EGY",
+    "group": "G",
+    "pot": 3,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "BEL",
+      "MD2": "NZL",
+      "MD3": "IRN"
+    },
+    "round_probs": {
+      "SF": 0.04,
+      "QF": 0.16,
+      "Final": 0.02,
+      "R32": 1.0,
+      "Champion": 0.004
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26g",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.5
+  },
+  {
+    "nation": "New Zealand",
+    "fifa_code": "NZL",
+    "group": "G",
+    "pot": 4,
+    "confederation": "OFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "IRN",
+      "MD2": "EGY",
+      "MD3": "BEL"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26g"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Spain",
+    "fifa_code": "ESP",
+    "group": "H",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "CPV",
+      "MD2": "KSA",
+      "MD3": "URU"
+    },
+    "round_probs": {
+      "SF": 0.52,
+      "QF": 0.66,
+      "Final": 0.25,
+      "R32": 1.0,
+      "Champion": 0.126
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26h",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "QF",
+    "best_pick_prob": 0.7878787878787878
+  },
+  {
+    "nation": "Uruguay",
+    "fifa_code": "URU",
+    "group": "H",
+    "pot": 2,
+    "confederation": "CONMEBOL",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "KSA",
+      "MD2": "CPV",
+      "MD3": "ESP"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26h"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Saudi Arabia",
+    "fifa_code": "KSA",
+    "group": "H",
+    "pot": 3,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "URU",
+      "MD2": "ESP",
+      "MD3": "CPV"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26h"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Cape Verde",
+    "fifa_code": "CPV",
+    "group": "H",
+    "pot": 4,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-15",
+      "MD2": "2026-06-21",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "ESP",
+      "MD2": "URU",
+      "MD3": "KSA"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26h"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "France",
+    "fifa_code": "FRA",
+    "group": "I",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "SEN",
+      "MD2": "IRQ",
+      "MD3": "NOR"
+    },
+    "round_probs": {
+      "SF": 0.78,
+      "Final": 0.53,
+      "R32": 1.0,
+      "Champion": 0.344
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26i",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.6794871794871795
+  },
+  {
+    "nation": "Senegal",
+    "fifa_code": "SEN",
+    "group": "I",
+    "pot": 2,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "FRA",
+      "MD2": "NOR",
+      "MD3": "IRQ"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26i"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Norway",
+    "fifa_code": "NOR",
+    "group": "I",
+    "pot": 3,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "IRQ",
+      "MD2": "SEN",
+      "MD3": "FRA"
+    },
+    "round_probs": {
+      "SF": 0.47,
+      "Final": 0.19,
+      "R32": 1.0,
+      "Champion": 0.063
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26i",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.4042553191489362
+  },
+  {
+    "nation": "Iraq",
+    "fifa_code": "IRQ",
+    "group": "I",
+    "pot": 4,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-26"
+    },
+    "matchday_opponents": {
+      "MD1": "NOR",
+      "MD2": "FRA",
+      "MD3": "SEN"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26i"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Argentina",
+    "fifa_code": "ARG",
+    "group": "J",
+    "pot": 1,
+    "confederation": "CONMEBOL",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "ALG",
+      "MD2": "AUT",
+      "MD3": "JOR"
+    },
+    "round_probs": {
+      "SF": 0.61,
+      "QF": 0.85,
+      "Final": 0.39,
+      "R32": 1.0,
+      "Champion": 0.176
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26j",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "QF",
+    "best_pick_prob": 0.7176470588235294
+  },
+  {
+    "nation": "Austria",
+    "fifa_code": "AUT",
+    "group": "J",
+    "pot": 2,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "JOR",
+      "MD2": "ARG",
+      "MD3": "ALG"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26j"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Algeria",
+    "fifa_code": "ALG",
+    "group": "J",
+    "pot": 3,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-16",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "ARG",
+      "MD2": "JOR",
+      "MD3": "AUT"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26j"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Jordan",
+    "fifa_code": "JOR",
+    "group": "J",
+    "pot": 4,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-22",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "AUT",
+      "MD2": "ALG",
+      "MD3": "ARG"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26j"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Portugal",
+    "fifa_code": "POR",
+    "group": "K",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "COD",
+      "MD2": "UZB",
+      "MD3": "COL"
+    },
+    "round_probs": {
+      "SF": 0.23,
+      "QF": 0.34,
+      "Final": 0.16,
+      "R32": 1.0,
+      "Champion": 0.063
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26k",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.6956521739130435
+  },
+  {
+    "nation": "Colombia",
+    "fifa_code": "COL",
+    "group": "K",
+    "pot": 2,
+    "confederation": "CONMEBOL",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "UZB",
+      "MD2": "COD",
+      "MD3": "POR"
+    },
+    "round_probs": {
+      "SF": 0.25,
+      "QF": 0.61,
+      "Final": 0.12,
+      "R32": 1.0,
+      "Champion": 0.034
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26k",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "SF",
+    "best_pick_prob": 0.48
+  },
+  {
+    "nation": "Uzbekistan",
+    "fifa_code": "UZB",
+    "group": "K",
+    "pot": 3,
+    "confederation": "AFC",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "COL",
+      "MD2": "POR",
+      "MD3": "COD"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26k"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "DR Congo",
+    "fifa_code": "COD",
+    "group": "K",
+    "pot": 4,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "POR",
+      "MD2": "COL",
+      "MD3": "UZB"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26k"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "England",
+    "fifa_code": "ENG",
+    "group": "L",
+    "pot": 1,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "CRO",
+      "MD2": "GHA",
+      "MD3": "PAN"
+    },
+    "round_probs": {
+      "SF": 0.34,
+      "QF": 0.49,
+      "Final": 0.19,
+      "R32": 1.0,
+      "Champion": 0.081
+    },
+    "round_urls": {
+      "SF": "https://kalshi.com/markets/kxwcround/kxwcround-26semi",
+      "QF": "https://kalshi.com/markets/kxwcround/kxwcround-26quar",
+      "Final": "https://kalshi.com/markets/kxwcround/kxwcround-26final",
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26l",
+      "Champion": "https://kalshi.com/markets/kxmenworldcup/kxmenworldcup-26"
+    },
+    "best_pick_round": "QF",
+    "best_pick_prob": 0.6938775510204083
+  },
+  {
+    "nation": "Croatia",
+    "fifa_code": "CRO",
+    "group": "L",
+    "pot": 2,
+    "confederation": "UEFA",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "ENG",
+      "MD2": "PAN",
+      "MD3": "GHA"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26l"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Panama",
+    "fifa_code": "PAN",
+    "group": "L",
+    "pot": 3,
+    "confederation": "CONCACAF",
+    "eliminated": true,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "GHA",
+      "MD2": "CRO",
+      "MD3": "ENG"
+    },
+    "round_probs": {
+      "R32": 0.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26l"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  },
+  {
+    "nation": "Ghana",
+    "fifa_code": "GHA",
+    "group": "L",
+    "pot": 4,
+    "confederation": "CAF",
+    "eliminated": false,
+    "matchday_probs": {},
+    "matchday_urls": {},
+    "matchday_dates": {
+      "MD1": "2026-06-17",
+      "MD2": "2026-06-23",
+      "MD3": "2026-06-27"
+    },
+    "matchday_opponents": {
+      "MD1": "PAN",
+      "MD2": "ENG",
+      "MD3": "CRO"
+    },
+    "round_probs": {
+      "R32": 1.0
+    },
+    "round_urls": {
+      "R32": "https://kalshi.com/markets/kxwcgroupqual/kxwcgroupqual-26l"
+    },
+    "best_pick_round": null,
+    "best_pick_prob": null
+  }
+]
